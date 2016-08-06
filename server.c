@@ -6,7 +6,7 @@
 int main()
 {
 	int serverSockId, clientSockId;
-	struct sockaddr_in serverSocAddr,clientSocAddr;
+	struct sockaddr_in serverSockAddr,clientSocAddr;
 	int status;
 	char clientMessage[4096];
 
@@ -16,18 +16,21 @@ int main()
 		return 0;
 	}
 
-	serverSocAddr.sin_family = AF_INET;
-	serverSocAddr.sin_port = htons(3232);
-	serverSocAddr.sin_addr.s_addr = INADDR_ANY;
+	serverSockAddr.sin_family = AF_INET;
+	serverSockAddr.sin_port = htons(3232);
+	serverSockAddr.sin_addr.s_addr = INADDR_ANY;
 
-	status = bind(serverSockId, (struct sockaddr *)&serverSocAddr, sizeof(serverSocAddr));
+	status = bind(serverSockId, (struct sockaddr *)&serverSockAddr, sizeof(serverSockAddr));
 	printf("%d\n", status);
 
 	listen(serverSockId , 3);
 
 	int c = (sizeof(clientSocAddr));
 	clientSockId = accept(serverSockId, (struct sockaddr *)&clientSocAddr, &c);	
+	clientMessage[0] = 'P';
+	clientMessage[1] = '\n';
+	write(clientSockId , clientMessage , 4096);
 	recv(clientSockId , clientMessage , 4096, 0);
-	printf("%s\n", clientMessage);
+	printf("From client%s\n", clientMessage);
 	return 0;
 }
