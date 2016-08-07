@@ -7,8 +7,10 @@ int main()
 {
 	int serverSockId, clientSockId;
 	struct sockaddr_in serverSockAddr,clientSocAddr;
-	int status;
-	char clientMessage[4096];
+	int status,serverStorageSize;
+	char messageBuffer[4096];
+	struct sockaddr_storage serverStorage;
+
 
 	serverSockId = socket(AF_INET, SOCK_STREAM, 0);
 	if(serverSockId == -1){
@@ -21,16 +23,10 @@ int main()
 	serverSockAddr.sin_addr.s_addr = INADDR_ANY;
 
 	status = bind(serverSockId, (struct sockaddr *)&serverSockAddr, sizeof(serverSockAddr));
-	printf("%d\n", status);
-
 	listen(serverSockId , 3);
-
-	int c = (sizeof(clientSocAddr));
-	clientSockId = accept(serverSockId, (struct sockaddr *)&clientSocAddr, &c);	
-	clientMessage[0] = 'P';
-	clientMessage[1] = '\n';
-	write(clientSockId , clientMessage , 4096);
-	recv(clientSockId , clientMessage , 4096, 0);
-	printf("From client%s\n", clientMessage);
+	serverStorageSize = sizeof(serverStorage);
+	clientSockId = accept(serverSockId, (struct sockaddr *)&serverStorage,&serverStorageSize);
+	strcpy(messageBuffer, "Poop");
+	send(clientSockId, messageBuffer, strlen(messageBuffer), 0 );
 	return 0;
 }
