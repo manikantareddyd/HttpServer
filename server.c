@@ -20,7 +20,7 @@ int main()
 	}
 
 	serverSockAddr.sin_family = AF_INET;
-	serverSockAddr.sin_port = htons(3232);
+	serverSockAddr.sin_port = htons(3233);
 	serverSockAddr.sin_addr.s_addr = INADDR_ANY;
 
 	status = bind(serverSockId, (struct sockaddr *)&serverSockAddr, sizeof(serverSockAddr));
@@ -61,11 +61,34 @@ int main()
 			if(!fread(messageBuffer,1, 4096, readSocket)){
 				break;
 			}
-			printf("%s\n", messageBuffer);
+			printf("The client needs this file: %s\n", messageBuffer);
+			FILE *file;
+			file = fopen(messageBuffer,"r");
+			if(file == NULL){
+				for(i=0;i<4096;i++) messageBuffer[i] = 0;
+				strcpy(messageBuffer,"Such file doesn't exist\n");
+				fwrite(messageBuffer,1,4096,writeSocket);
+				fflush(writeSocket);
+				continue;
+			}
 			for(i=0;i<4096;i++) messageBuffer[i] = 0;
-			strcpy(messageBuffer,"I received\n");
+			strcpy(messageBuffer,"I received your request\n");
 			fwrite(messageBuffer,1,4096,writeSocket);
 			fflush(writeSocket);
+			
+			for(i=0;i<4096;i++) messageBuffer[i] = 0;
+			while(1){
+				if(!fread(messageBuffer,1,4096,file)) {
+					strcpy(messageBuffer,"EOF");
+					fwrite(messageBuffer,1,4096,writeSocket);
+					fflush(writeSocket);
+					//printf("Broke\n");
+					break;
+					
+				}
+				fwrite(messageBuffer,1,4096,writeSocket);
+				fflush(writeSocket);
+			}
 		}
 		fclose(readSocket);
 		fclose(writeSocket);
