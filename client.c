@@ -5,6 +5,7 @@
 
 int main( )
 {
+	int bytesReceived;
 	int clientSockId;
 	char messageBuffer[4096];
 	int i;
@@ -13,7 +14,7 @@ int main( )
 	clientSockId = socket(AF_INET, SOCK_STREAM, 0);
 
 	serverSockAddr.sin_family = AF_INET;
-	serverSockAddr.sin_port = htons(3233);
+	serverSockAddr.sin_port = htons(3234);
 	serverSockAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
 	int serverSockAddrSize = (sizeof(serverSockAddr));
@@ -41,12 +42,15 @@ int main( )
 		while(1){
 			memset(messageBuffer,0,4096);
 			fread(messageBuffer,1,4096,readSocket);
-			if(messageBuffer[0]=='E' && messageBuffer[1]=='O' && messageBuffer[2]=='F')	
+			bytesReceived = atoi(messageBuffer+4091);
+			printf("Here %d %s\n",bytesReceived, messageBuffer+4091);
+			if(messageBuffer[0]=='M' && messageBuffer[1]=='M' && messageBuffer[2]=='M')	
 			{
 				break;
 			}
-			fprintf(fp,"%s", messageBuffer);
-			printf("%s", messageBuffer);
+			//fprintf(fp,"%s", messageBuffer);
+			fwrite(messageBuffer,1,bytesReceived,fp);
+			fwrite(messageBuffer,1,bytesReceived,stdout);
 			memset(messageBuffer,0,4096);
 		}
 		printf("\n");

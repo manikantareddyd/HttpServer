@@ -3,12 +3,27 @@
 #include <netinet/in.h>
 #include <string.h>
 
+char intstr[5];
+void *intTostr(int a)
+{
+	memset(intstr,0,4);
+	int i;
+	for(i=0;i<4;i++)
+	{
+		intstr[3-i] = '0' + a%10;
+		a = a/10;
+	}
+	intstr[4] = 0;
+	printf("%s\n", intstr);
+}
+
 int main()
 {
 	int serverSockId, clientSockId;
 	struct sockaddr_in serverSockAddr,clientSocAddr;
 	int status,serverStorageSize,i;
 	char messageBuffer[4096];
+	int bytesRead;
 
 	struct sockaddr_storage serverStorage;
 
@@ -20,7 +35,7 @@ int main()
 	}
 
 	serverSockAddr.sin_family = AF_INET;
-	serverSockAddr.sin_port = htons(3233);
+	serverSockAddr.sin_port = htons(3234);
 	serverSockAddr.sin_addr.s_addr = INADDR_ANY;
 
 	status = bind(serverSockId, (struct sockaddr *)&serverSockAddr, sizeof(serverSockAddr));
@@ -45,18 +60,23 @@ int main()
 			&serverStorageSize
 			);
 
-		if(clientSockId < 0){
+		if(clientSockId < 0)
+		{
 			printf("I can't accept this socket\n");
 			return 0;
 		}
 
-
-		memset(messageBuffer,0,4096);
-		strcpy(messageBuffer, "Welcome - We just connected\n");
 		FILE *writeSocket = fdopen(clientSockId, "w");
 		FILE *readSocket = fdopen(dup(clientSockId),"r");
+		
+		memset(messageBuffer,0,4096);
+		strcpy(messageBuffer, "Welcome - We just connected\n");
 		fwrite( messageBuffer,1,4096,writeSocket);
-		while(1){
+		// intTostr(bytesRead);
+		// snprintf(messageBuffer+4091, 4, intstr)
+		fflush(writeSocket);
+		while(1)
+		{
 			memset(messageBuffer,0,4096);
 			if(!fread(messageBuffer,1, 4096, readSocket)){
 				break;
@@ -64,32 +84,46 @@ int main()
 			printf("The client needs this file: %s\n", messageBuffer);
 			FILE *file;
 			file = fopen(messageBuffer,"r");
-			if(file == NULL){
+			if(file == NULL)
+			{
 				memset(messageBuffer,0,4096);
 				strcpy(messageBuffer,"Such file doesn't exist\n");
+				intTostr(24);
+				snprintf(messageBuffer+4091, 5, intstr); 	
 				fwrite(messageBuffer,1,4096,writeSocket);
 				fflush(writeSocket);
 				
-				strcpy(messageBuffer,"EOF");
+				strcpy(messageBuffer,"MMM");
+				intTostr(3);
+				snprintf(messageBuffer+4091, 5, intstr); 	
 				fwrite(messageBuffer,1,4096,writeSocket);
 				fflush(writeSocket);
 				continue;
 			}
+
 			memset(messageBuffer,0,4096);
 			strcpy(messageBuffer,"I received your request\n");
-			fwrite(messageBuffer,1,4096,writeSocket);
+			fwrite(messageBuffer,1,4091,writeSocket);
 			fflush(writeSocket);
 			
-			while(1){
+			while(1)
+			{
 				memset(messageBuffer,0,4096);
-				if(!fread(messageBuffer,1,4096,file)) {
-					strcpy(messageBuffer,"EOF");
+				bytesRead = fread(messageBuffer,1,4091,file);
+				printf("bytes read 1: %d\n", bytesRead);
+				if(!bytesRead)
+				{
+					memset(messageBuffer,0,4096);
+					strcpy(messageBuffer,"MMM");
+					intTostr(bytesRead);
+					snprintf(messageBuffer+4091, 5, intstr);
 					fwrite(messageBuffer,1,4096,writeSocket);
 					fflush(writeSocket);
 					//printf("Broke\n");
 					break;
-					
 				}
+				intTostr(bytesRead);
+				snprintf(messageBuffer+4091, 5, intstr);
 				fwrite(messageBuffer,1,4096,writeSocket);
 				fflush(writeSocket);
 			}
@@ -99,3 +133,4 @@ int main()
 	}
 	return 0;
 }
+
