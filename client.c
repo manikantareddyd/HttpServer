@@ -35,26 +35,23 @@ int main( )
 		fflush(writeSocket);
 		
 		memset(messageBuffer,0,4096);
-		fread(messageBuffer,1,4096,readSocket);
-		printf("%s\n",messageBuffer );
+		bytesReceived = fread(messageBuffer,1,4096,readSocket);
 		
 		FILE *fp = fopen("haha","w");
+		printf("\nFile contents:\n");
 		while(1){
 			memset(messageBuffer,0,4096);
 			fread(messageBuffer,1,4096,readSocket);
 			bytesReceived = atoi(messageBuffer+4091);
-			printf("Here %d %s\n",bytesReceived, messageBuffer+4091);
-			if(messageBuffer[0]=='M' && messageBuffer[1]=='M' && messageBuffer[2]=='M')	
+			if(!strcmp(messageBuffer,"<---EOF--->"))	
 			{
 				break;
 			}
-			//fprintf(fp,"%s", messageBuffer);
 			fwrite(messageBuffer,1,bytesReceived,fp);
 			fwrite(messageBuffer,1,bytesReceived,stdout);
 			memset(messageBuffer,0,4096);
 		}
 		printf("\n");
-		fprintf(fp,"\n");
 		fclose(fp);
 	
 	}
