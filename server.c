@@ -7,8 +7,9 @@ int main()
 {
 	int serverSockId, clientSockId;
 	struct sockaddr_in serverSockAddr,clientSocAddr;
-	int status,serverStorageSize;
+	int status,serverStorageSize,i;
 	char messageBuffer[4096];
+
 	struct sockaddr_storage serverStorage;
 
 
@@ -23,10 +24,29 @@ int main()
 	serverSockAddr.sin_addr.s_addr = INADDR_ANY;
 
 	status = bind(serverSockId, (struct sockaddr *)&serverSockAddr, sizeof(serverSockAddr));
+	if(status == -1){
+		printf("This socket port seems occupied!\n");
+	}
+
+
 	listen(serverSockId , 3);
 	serverStorageSize = sizeof(serverStorage);
-	clientSockId = accept(serverSockId, (struct sockaddr *)&serverStorage,&serverStorageSize);
-	strcpy(messageBuffer, "Poop");
-	send(clientSockId, messageBuffer, strlen(messageBuffer), 0 );
+	
+	while(1)
+	{
+		clientSockId = accept(serverSockId, (struct sockaddr *)&serverStorage,&serverStorageSize);
+		for(i=0;i<4096;i++) messageBuffer[i] = '\0';
+		strcpy(messageBuffer, "Welcome - We just connected");
+		send(clientSockId, messageBuffer, 4096, 0 );
+		for(i=0;i<4096;i++) messageBuffer[i] = ' ';
+		while(read(clientSockId, messageBuffer, 4096, 0) > 0)
+		{
+			printf("%s\n",messageBuffer );
+			for(i=0;i<4096;i++) messageBuffer[i] = '\0';
+			strcpy(messageBuffer, "I received it");
+			send(clientSockId, messageBuffer, 4096,0);
+		}
+		
+	}
 	return 0;
 }
