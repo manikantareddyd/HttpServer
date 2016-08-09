@@ -51,13 +51,13 @@ int main()
 		}
 
 
-		for(i=0;i<4096;i++) messageBuffer[i] = 0;
+		memset(messageBuffer,0,4096);
 		strcpy(messageBuffer, "Welcome - We just connected\n");
 		FILE *writeSocket = fdopen(clientSockId, "w");
 		FILE *readSocket = fdopen(dup(clientSockId),"r");
 		fwrite( messageBuffer,1,4096,writeSocket);
-		for(i=0;i<4096;i++) messageBuffer[i] = 0;
 		while(1){
+			memset(messageBuffer,0,4096);
 			if(!fread(messageBuffer,1, 4096, readSocket)){
 				break;
 			}
@@ -65,19 +65,23 @@ int main()
 			FILE *file;
 			file = fopen(messageBuffer,"r");
 			if(file == NULL){
-				for(i=0;i<4096;i++) messageBuffer[i] = 0;
+				memset(messageBuffer,0,4096);
 				strcpy(messageBuffer,"Such file doesn't exist\n");
+				fwrite(messageBuffer,1,4096,writeSocket);
+				fflush(writeSocket);
+				
+				strcpy(messageBuffer,"EOF");
 				fwrite(messageBuffer,1,4096,writeSocket);
 				fflush(writeSocket);
 				continue;
 			}
-			for(i=0;i<4096;i++) messageBuffer[i] = 0;
+			memset(messageBuffer,0,4096);
 			strcpy(messageBuffer,"I received your request\n");
 			fwrite(messageBuffer,1,4096,writeSocket);
 			fflush(writeSocket);
 			
-			for(i=0;i<4096;i++) messageBuffer[i] = 0;
 			while(1){
+				memset(messageBuffer,0,4096);
 				if(!fread(messageBuffer,1,4096,file)) {
 					strcpy(messageBuffer,"EOF");
 					fwrite(messageBuffer,1,4096,writeSocket);

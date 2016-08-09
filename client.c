@@ -25,25 +25,34 @@ int main( )
 	printf("%s\n",messageBuffer );
 	while(1)
 	{
-		for(i=0;i<4096;i++) messageBuffer[i] = 0;
+		memset(messageBuffer,0,4096);
 		scanf("%s",messageBuffer);
 		printf("I requested: %s\n",messageBuffer);
+
 		if(messageBuffer[0]=='-') break;
 		fwrite(messageBuffer,1,4096,writeSocket);
 		fflush(writeSocket);
-		for(i=0;i<4096;i++) messageBuffer[i] = 0;
+		
+		memset(messageBuffer,0,4096);
 		fread(messageBuffer,1,4096,readSocket);
 		printf("%s\n",messageBuffer );
-		while(fread(messageBuffer,1,4096,readSocket)){
+		
+		FILE *fp = fopen("haha","w");
+		while(1){
+			memset(messageBuffer,0,4096);
+			fread(messageBuffer,1,4096,readSocket);
 			if(messageBuffer[0]=='E' && messageBuffer[1]=='O' && messageBuffer[2]=='F')	
 			{
-				//printf("I came here\n");
 				break;
 			}
-			//printf("POOP\n");
-			printf("%s\n", messageBuffer);
+			fprintf(fp,"%s", messageBuffer);
+			printf("%s", messageBuffer);
+			memset(messageBuffer,0,4096);
 		}
-		//printf("da fuq\n");
+		printf("\n");
+		fprintf(fp,"\n");
+		fclose(fp);
+	
 	}
 	fclose(readSocket);
 	fclose(writeSocket);
