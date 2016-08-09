@@ -29,24 +29,46 @@ int main()
 	}
 
 
-	listen(serverSockId , 3);
+	int listenStatus = listen(serverSockId , 3);
+	if(listenStatus < 0){
+		printf("I can't listen to this port right now. Please try again!\n");
+		return 0;
+	}
+
 	serverStorageSize = sizeof(serverStorage);
 	
 	while(1)
 	{
-		clientSockId = accept(serverSockId, (struct sockaddr *)&serverStorage,&serverStorageSize);
-		for(i=0;i<4096;i++) messageBuffer[i] = '\0';
-		strcpy(messageBuffer, "Welcome - We just connected");
-		send(clientSockId, messageBuffer, 4096, 0 );
-		for(i=0;i<4096;i++) messageBuffer[i] = ' ';
-		while(read(clientSockId, messageBuffer, 4096, 0) > 0)
-		{
-			printf("%s\n",messageBuffer );
-			for(i=0;i<4096;i++) messageBuffer[i] = '\0';
-			strcpy(messageBuffer, "I received it");
-			send(clientSockId, messageBuffer, 4096,0);
+		clientSockId = accept(
+			serverSockId, 
+			(struct sockaddr *)&serverStorage,
+			&serverStorageSize
+			);
+
+		if(clientSockId < 0){
+			printf("I can't accept this socket\n");
+			return 0;
 		}
-		
+
+
+		for(i=0;i<4096;i++) messageBuffer[i] = 0;
+		strcpy(messageBuffer, "Welcome - We just connected\n");
+		FILE *writeSocket = fdopen(clientSockId, "w");
+		FILE *readSocket = fdopen(dup(clientSockId),"r");
+		fwrite( messageBuffer,1,4096,writeSocket);
+		for(i=0;i<4096;i++) messageBuffer[i] = 0;
+		while(1){
+			if(!fread(messageBuffer,1, 4096, readSocket)){
+				break;
+			}
+			printf("%s\n", messageBuffer);
+			for(i=0;i<4096;i++) messageBuffer[i] = 0;
+			strcpy(messageBuffer,"I received\n");
+			fwrite(messageBuffer,1,4096,writeSocket);
+			fflush(writeSocket);
+		}
+		fclose(readSocket);
+		fclose(writeSocket);
 	}
 	return 0;
 }
