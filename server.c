@@ -95,7 +95,13 @@ int main()
 		while(1)
 		{
 			memset(messageBuffer,0,4096);
-			if(!fread(messageBuffer,1, 4096, readSocket))
+			bytesRead = fread(
+				messageBuffer,
+				1, 
+				4096, 
+				readSocket
+			);
+			if(bytesRead == 0)
 			{
 				break;
 			}
