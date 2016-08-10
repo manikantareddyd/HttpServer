@@ -38,7 +38,7 @@ void writeToSocket(char *messageBuffer, FILE * writeSocket)
 		}
 	}
 }
-int main()
+int main(int argc, char *argv[])
 {
 	int serverSockId, clientSockId;
 	struct sockaddr_in serverSockAddr,clientSocAddr;
@@ -57,7 +57,7 @@ int main()
 		return 0;
 	}
 	serverSockAddr.sin_family = AF_INET;
-	serverSockAddr.sin_port = htons(3234);
+	serverSockAddr.sin_port = htons(atoi(argv[1]));
 	serverSockAddr.sin_addr.s_addr = INADDR_ANY;
 	status = bind(
 		serverSockId, 

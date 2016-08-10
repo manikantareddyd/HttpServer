@@ -25,7 +25,7 @@ void writeToSocket(char *messageBuffer, FILE * writeSocket)
 		}
 	}
 }
-int main( )
+int main( int argc, char *argv[] )
 {
 	int bytesReceived;
 	int clientSockId;
@@ -38,8 +38,8 @@ int main( )
 		0
 	);
 	serverSockAddr.sin_family = AF_INET;
-	serverSockAddr.sin_port = htons(3234);
-	serverSockAddr.sin_addr.s_addr = inet_addr("172.24.1.14");
+	serverSockAddr.sin_port = htons(atoi(argv[1]));
+	serverSockAddr.sin_addr.s_addr = inet_addr(argv[2]);
 	int serverSockAddrSize = (sizeof(serverSockAddr));
 	connect(
 		clientSockId, 
