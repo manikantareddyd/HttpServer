@@ -39,7 +39,7 @@ int main( )
 	);
 	serverSockAddr.sin_family = AF_INET;
 	serverSockAddr.sin_port = htons(3234);
-	serverSockAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	serverSockAddr.sin_addr.s_addr = inet_addr("172.24.1.14");
 	int serverSockAddrSize = (sizeof(serverSockAddr));
 	connect(
 		clientSockId, 
@@ -49,13 +49,13 @@ int main( )
 	memset(messageBuffer,0,4096);
 	FILE *writeSocket = fdopen(clientSockId, "w");
 	FILE *readSocket = fdopen(dup(clientSockId),"r");
-	bytesRead = fread(
+	bytesReceived = fread(
 		messageBuffer,
 		1,
 		4096,
 		readSocket
 	);
-	if(bytesRead == 0)
+	if(bytesReceived == 0)
 	{
 		printf("Server Busy\n");
 		return 0;
