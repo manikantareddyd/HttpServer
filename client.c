@@ -3,8 +3,6 @@
 #include <netinet/in.h>
 #include <string.h>
 
-
-
 void writeToSocket(char *messageBuffer, FILE * writeSocket);
 
 int main( int argc, char *argv[] )
@@ -25,8 +23,8 @@ int main( int argc, char *argv[] )
 		0
 	);
 	serverSockAddr.sin_family = AF_INET;
-	serverSockAddr.sin_port = htons(atoi(argv[1]));
-	serverSockAddr.sin_addr.s_addr = inet_addr(argv[2]);
+	serverSockAddr.sin_port = htons(atoi(argv[2]));
+	serverSockAddr.sin_addr.s_addr = inet_addr(argv[1]);
 	int serverSockAddrSize = (sizeof(serverSockAddr));
 	
 	/* 
@@ -59,6 +57,7 @@ int main( int argc, char *argv[] )
 		4096,
 		readSocket
 	);
+	
 	/*
 		If you don't receive anything, then the server is angry with you.
 		Go away
@@ -72,6 +71,7 @@ int main( int argc, char *argv[] )
 		*/
 		return 0;
 	} 	
+	
 	/*
 		Print the greeting message.
 	*/

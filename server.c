@@ -50,7 +50,8 @@ int main(int argc, char *argv[])
 	);
 	if(status == -1)
 	{
-		printf("This socket port seems occupied!\n");
+		fprintf(stderr,"This socket port seems occupied!\n");
+		return 0;
 	}
 	
 
@@ -61,7 +62,7 @@ int main(int argc, char *argv[])
 	int listenStatus = listen(serverSockId , 3);
 	if(listenStatus < 0)
 	{
-		printf("I can't listen to this port right now. Please try again!\n");
+		fprintf(stderr,"I can't listen to this port right now. Please try again!\n");
 		return 0;
 	}
 	serverStorageSize = sizeof(serverStorage);
@@ -101,7 +102,7 @@ int main(int argc, char *argv[])
 			Empty the buffer and send a welcome message.
 		*/
 		memset(messageBuffer,0,4096);
-		strcpy(messageBuffer, "Welcome - We just connected\n");
+		strcpy(messageBuffer, "Server: Welcome - We just connected\n");
 		writeToSocket(messageBuffer,writeSocket);
 		
 
@@ -142,7 +143,7 @@ int main(int argc, char *argv[])
 					need to tell the client its erroneous.
 				*/
 				memset(messageBuffer,0,4096);
-				strcpy(messageBuffer,"Such file doesn't exist\n");
+				strcpy(messageBuffer,"Server: Such file doesn't exist\n");
 				intTostr(333);
 				snprintf(messageBuffer+4091, 5, "%s",intstr); 	
 				writeToSocket(messageBuffer,writeSocket);
@@ -150,7 +151,7 @@ int main(int argc, char *argv[])
 			}
 
 			memset(messageBuffer,0,4096);
-			strcpy(messageBuffer,"I received your request\nHere are File contents:");
+			strcpy(messageBuffer,"Server: I received your request\n\tHere are the File contents:");
 			intTostr(24);
 			snprintf(messageBuffer+4091, 5, "%s",intstr);
 			writeToSocket(messageBuffer,writeSocket);
