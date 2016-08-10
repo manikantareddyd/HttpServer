@@ -3,6 +3,23 @@
 #include <netinet/in.h>
 #include <string.h>
 
+void writeToSocket(char *messageBuffer, FILE * writeSocket)
+{
+	int bytesToWrite = 4096;
+	int bytesWritten = 0;
+	int bytesOverHead = 0;
+	while(1){
+		bytesWritten = fwrite( messageBuffer + bytesOverHead,1,bytesToWrite,writeSocket);
+		fflush(writeSocket);
+		if(bytesWritten == bytesToWrite) break;
+		else{
+			bytesOverHead = bytesOverHead + bytesWritten;
+			bytesToWrite = 4096 - bytesOverHead;
+		}
+	}
+}
+
+
 int main( )
 {
 	int bytesReceived;
@@ -28,17 +45,18 @@ int main( )
 	{
 		memset(messageBuffer,0,4096);
 		scanf("%s",messageBuffer);
-		printf("I requested: %s\n",messageBuffer);
+		//printf("I requested: %s\n",messageBuffer);
 
 		if(messageBuffer[0]=='-') break;
-		fwrite(messageBuffer,1,4096,writeSocket);
-		fflush(writeSocket);
-		
+		// fwrite(messageBuffer,1,4096,writeSocket);
+		// fflush(writeSocket);
+		writeToSocket(messageBuffer,writeSocket);
 		memset(messageBuffer,0,4096);
 		bytesReceived = fread(messageBuffer,1,4096,readSocket);
-		
+		printf("%s\n", messageBuffer);
+		if(atoi(messageBuffer+4091)==333) continue;
 		FILE *fp = fopen("haha","w");
-		printf("\nFile contents:\n");
+		printf("--------------------------------\n\n");
 		while(1){
 			memset(messageBuffer,0,4096);
 			fread(messageBuffer,1,4096,readSocket);
@@ -51,7 +69,7 @@ int main( )
 			fwrite(messageBuffer,1,bytesReceived,stdout);
 			memset(messageBuffer,0,4096);
 		}
-		printf("\n");
+		printf("\n--------------------------------\n");
 		fclose(fp);
 	
 	}

@@ -16,6 +16,23 @@ void *intTostr(int a)
 	intstr[4] = 0;
 }
 
+
+void writeToSocket(char *messageBuffer, FILE * writeSocket)
+{
+	int bytesToWrite = 4096;
+	int bytesWritten = 0;
+	int bytesOverHead = 0;
+	while(1){
+		bytesWritten = fwrite( messageBuffer + bytesOverHead,1,bytesToWrite,writeSocket);
+		fflush(writeSocket);
+		if(bytesWritten == bytesToWrite) break;
+		else{
+			bytesOverHead = bytesOverHead + bytesWritten;
+			bytesToWrite = 4096 - bytesOverHead;
+		}
+	}
+}
+
 int main()
 {
 	int serverSockId, clientSockId;
@@ -23,6 +40,7 @@ int main()
 	int status,serverStorageSize,i;
 	char messageBuffer[4096];
 	int bytesRead;
+
 
 	struct sockaddr_storage serverStorage;
 
@@ -70,10 +88,12 @@ int main()
 		
 		memset(messageBuffer,0,4096);
 		strcpy(messageBuffer, "Welcome - We just connected\n");
-		fwrite( messageBuffer,1,4096,writeSocket);
+		
+
+		writeToSocket(messageBuffer,writeSocket);
+
 		// intTostr(bytesRead);
 		// snprintf(messageBuffer+4091, 4, intstr)
-		fflush(writeSocket);
 		while(1)
 		{
 			memset(messageBuffer,0,4096);
@@ -87,16 +107,19 @@ int main()
 			{
 				memset(messageBuffer,0,4096);
 				strcpy(messageBuffer,"Such file doesn't exist\n");
-				intTostr(24);
+				intTostr(333);
 				snprintf(messageBuffer+4091, 5, "%s",intstr); 	
-				fwrite(messageBuffer,1,4096,writeSocket);
-				fflush(writeSocket);
-				
-				strcpy(messageBuffer,"<---EOF--->");
-				intTostr(11);
-				snprintf(messageBuffer+4091, 5, "%s",intstr); 	
-				fwrite(messageBuffer,1,4096,writeSocket);
-				fflush(writeSocket);
+				//fwrite(messageBuffer,1,4096,writeSocket);
+				//fflush(writeSocket);
+				writeToSocket(messageBuffer,writeSocket);
+		
+				// strcpy(messageBuffer,"<---EOF--->");
+				// intTostr(11);
+				// snprintf(messageBuffer+4091, 5, "%s",intstr); 	
+				// // fwrite(messageBuffer,1,4096,writeSocket);
+				// // fflush(writeSocket);
+				// writeToSocket(messageBuffer,writeSocket);
+		
 				continue;
 			}
 
@@ -104,8 +127,9 @@ int main()
 			strcpy(messageBuffer,"I received your request\n");
 			intTostr(24);
 			snprintf(messageBuffer+4091, 5, "%s",intstr);
-			fwrite(messageBuffer,1,4096,writeSocket);
-			fflush(writeSocket);
+			// fwrite(messageBuffer,1,4096,writeSocket);
+			// fflush(writeSocket);
+			writeToSocket(messageBuffer,writeSocket);
 			
 			while(1)
 			{
@@ -117,15 +141,19 @@ int main()
 					strcpy(messageBuffer,"<---EOF--->");
 					intTostr(11);
 					snprintf(messageBuffer+4091, 5, "%s",intstr);
-					fwrite(messageBuffer,1,4096,writeSocket);
-					fflush(writeSocket);
+					// fwrite(messageBuffer,1,4096,writeSocket);
+					// fflush(writeSocket);
+					writeToSocket(messageBuffer,writeSocket);
+		
 					//printf("Broke\n");
 					break;
 				}
 				intTostr(bytesRead);
 				snprintf(messageBuffer+4091, 5, "%s",intstr);
-				fwrite(messageBuffer,1,4096,writeSocket);
-				fflush(writeSocket);
+				// fwrite(messageBuffer,1,4096,writeSocket);
+				// fflush(writeSocket);
+				writeToSocket(messageBuffer,writeSocket);
+		
 			}
 		}
 		fclose(readSocket);
