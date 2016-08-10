@@ -18,7 +18,6 @@ int main( int argc, char *argv[] )
 	/* 
 		We will generate a socket for our usage.
 		A descriptor
-
 	*/
 	clientSockId = socket(
 		AF_INET, 
