@@ -1,10 +1,47 @@
+int scan(char *input, char *output, int start, int max)
+{
+    /*
+        This is a motherfucking piece of code. 
+        All it does is extract the request type from the input
+        LOL
+    */
+	if ( start >= strlen(input) )
+		return -1;
+
+	int appending_char_count = 0;
+	int i = start;
+	int count = 0;
+
+	for ( ; i < strlen(input); i ++ )
+	{
+		if ( *(input + i) != '\t' && *(input + i) != ' ' && *(input + i) != '\n' && *(input + i) != '\r')
+		{
+			if (count < (max-1))
+			{
+				*(output + appending_char_count) = *(input + i ) ;
+				appending_char_count += 1;
+
+				count++;
+			}		
+		}	
+		else
+			break;
+	}
+	*(output + appending_char_count) = '\0';	
+
+	i += 1;
+
+	for (; i < strlen(input); i ++ )
+	{
+		if ( *(input + i ) != '\t' && *(input + i) != ' ' && *(input + i) != '\n' && *(input + i) != '\r')
+			break;
+	}
+
+	return i;
+}
 
 void *intTostr(int a)
 {
-	/*
-		This function converts int between
-		0-4096 as stirngs of size 5 bytes
-	*/
 	memset(intstr,0,4);
 	int i;
 	for(i=0;i<4;i++)
@@ -18,18 +55,9 @@ void *intTostr(int a)
 //Not for recreational purposes
 int sendMessage(char *messageBuffer, FILE * writeSocket)
 {
-	/*
-		This is a helper function to correctly write to socket buffer.
-		It needs a message buffer and file pointer of the socket to which
-		we will be writing.
-	*/
 	int bytesToWrite = 4096;
 	int bytesWritten = 0;
 	int bytesOverHead = 0;
-	/*
-		We need to loop till all writable bytes are written to socket buffer.
-		If write fails in between we loop back and write the remaining bytes
-	*/
 	while(1){
 		bytesWritten = fwrite( 
 			messageBuffer + bytesOverHead,
@@ -49,37 +77,41 @@ int sendMessage(char *messageBuffer, FILE * writeSocket)
     return 1;
 }
 
-
-void handleRequests(int clientSockId)
+int checkrequest()
 {
-	/*
-		Here's a pretty dumb and awesome thing we'll do.
-		We'll treat the socket as a 'File'. Yes as a 'File'.
-		We'll use two files. One for writng and the other for reading.
-		We can generate the file pointers using fdopen. Read Man pages
-	*/		
+    char requestType[5];
+    memset(requestType,0,5);
+    scan(messageBuffer,requestType,0,5);
+    if(strlen(messageBuffer) <= 0)
+    {
+        return 0;
+    }
+    if(strcmp("GET",requestType)==0)
+    {
+        printf("Request Type: %s\n",requestType);
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void handleGetRequest()
+{
+    char file[200];
+    memset(file,0,200);
+    scan(messageBuffer,file,5,200);
+    printf("%s\n",file); 
+}
+
+void handleConnection(int clientSockId)
+{
 	FILE *readSocket = fdopen(dup(clientSockId),"r");		
-	
-	
-	/*
-		Empty the buffer and send a welcome message.
-        Update: Http Server has no requirement of this :p'
-	*/
-	// memset(messageBuffer,0,4096);
-	// strcpy(messageBuffer, "Server: Welcome - We just connected\n");
-	// sendMessage(messageBuffer,writeSocket);
 	
 
 	while(1)
 	{
-		/*
-			This loop is ensure the connection with the same
-			client, unless the client itself closes connection.
-		*/
-
-		/*
-			We read message from client( A File name)
-		*/
 		memset(messageBuffer,0,4096);
 		bytesRead = fread(
 			messageBuffer,
@@ -92,28 +124,22 @@ void handleRequests(int clientSockId)
 			break;
 		}
         
-        int request = checkrequest(messageBuffer);
+        int request = checkrequest();
 
         if(request == 1)
         {
             handleGetRequest();
         }
-
+    }
 		
 	fclose(readSocket);
-	fclose(writeSocket);
 }
 
-void handleGetRequest()
-{
-    //I need to write this
-}
+
+
+
 void acceptNewConnection()
 {
-	/*
-		We accept the connection request sent by client
-		and receive a descriptor for the clients socket.
-	*/
 	serverStorageSize = sizeof(serverStorage);
 	clientSockId = accept(
 		serverSockId, 
@@ -126,7 +152,7 @@ void acceptNewConnection()
 		exit(0);
 	}
 
-	handleRequests(clientSockId);
+	handleConnection(clientSockId);
 
 	close(clientSockId);
 }

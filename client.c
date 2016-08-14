@@ -50,32 +50,32 @@ int main( int argc, char *argv[] )
 		We try to receive something from the server.
 		Before that we set the buffer to null
 	*/
-	memset(messageBuffer,0,4096);
-	bytesReceived = fread(
-		messageBuffer,
-		1,
-		4096,
-		readSocket
-	);
+	// memset(messageBuffer,0,4096);
+	// bytesReceived = fread(
+	// 	messageBuffer,
+	// 	1,
+	// 	4096,
+	// 	readSocket
+	// );
 	
-	/*
-		If you don't receive anything, then the server is angry with you.
-		Go away
-	*/
-	if(bytesReceived == 0)
-	{
-		printf("Server Busy\n");
-		/*
-			Lets exit. 
-			Stop bothering the server.
-		*/
-		return 0;
-	} 	
+	// /*
+	// 	If you don't receive anything, then the server is angry with you.
+	// 	Go away
+	// */
+	// if(bytesReceived == 0)
+	// {
+	// 	printf("Server Busy\n");
+	// 	/*
+	// 		Lets exit. 
+	// 		Stop bothering the server.
+	// 	*/
+	// 	return 0;
+	// } 	
 	
 	/*
 		Print the greeting message.
 	*/
-	printf("%s\n",messageBuffer );
+	//printf("%s\n",messageBuffer );
 	
 	
 	while(1)
