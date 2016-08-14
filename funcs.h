@@ -116,20 +116,29 @@ int checkrequest()
 {
     char requestType[5];
     memset(requestType,0,5);
-    scan(messageBuffer,requestType,0,5);
     if(strlen(messageBuffer) <= 0)
     {
         return 0;
     }
+    scan(messageBuffer,requestType,0,5);
+	printf("Request Type: %s\n",requestType);
     if(strcmp("GET",requestType)==0)
     {
-        printf("Request Type: %s\n",requestType);
+        
         return 1;
     }
-    else
+	else if(strcmp("POST",requestType)==0)
+	{
+		return 2;
+	}
+    else if(strcmp("HEAD",requestType)==0)
     {
-        return 0;
+        return 3;
     }
+	else
+	{
+		return 0;
+	}
 }
 
 void handleGetRequest()
@@ -147,7 +156,7 @@ void handleGetRequest()
 	sprintf(numBuf,"%d",43);
 	printf("DaUFq\n");
 	
-	sendHeader("200 OK", "text/html",numBuf, writeSocket);
+	sendHeader("200 OK", "text/plain",numBuf, writeSocket);
 
 	fclose(writeSocket);
 
@@ -159,8 +168,8 @@ void handleConnection(int clientSockId)
 	if(DEBUG)
         printf("Handling Connection Request\n");
 
-	// while(1)
-	// {
+	while(1)
+	{
 		memset(messageBuffer,0,4096);
 		// bytesRead = fread(
 		// 	messageBuffer,
@@ -188,7 +197,7 @@ void handleConnection(int clientSockId)
         {
             handleGetRequest();
         }
-    // }
+    }
 		
 	fclose(readSocket);
 }
@@ -198,22 +207,34 @@ void handleConnection(int clientSockId)
 
 void acceptNewConnection()
 {
+
 	serverStorageSize = sizeof(serverStorage);
 	clientSockId = accept(
 		serverSockId, 
 		(struct sockaddr *)&serverStorage,
 		&serverStorageSize
 	);
-
-	if(clientSockId < 0)
+	if(fork()==0)
 	{
-		printf("I can't accept this socket\n");
+			if(clientSockId < 0)
+		{
+			printf("I can't accept this socket\n");
+			exit(0);
+		}
+		if(DEBUG)
+			printf("New Connection accepted \n");
+		
+		handleConnection(clientSockId);
+
+		close(clientSockId);
+
+		if(DEBUG)
+			printf("Connection Closed\n");
 		exit(0);
 	}
-    if(DEBUG)
-        printf("New Connection accepted \n");
+	else
+	{
+		close(clientSockId);
+	}
 	
-    handleConnection(clientSockId);
-
-	close(clientSockId);
 }
