@@ -7,4 +7,4 @@ int bytesRead;
 struct sockaddr_storage serverStorage;
 int serverStorageSize;
 int PORT;
-
+int DEBUG = 1;

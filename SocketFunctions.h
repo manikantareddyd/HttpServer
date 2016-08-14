@@ -15,6 +15,8 @@ void createSocket()
 		printf("Something went wrong with socket generation.\nPlease try again :P \n");
 		exit(0);
 	}
+	if(DEBUG)
+		printf("Socket Created\n");
 }
 
 void bindSocket()
@@ -38,6 +40,8 @@ void bindSocket()
 		fprintf(stderr,"This socket port seems occupied!\n");
 		exit(0);
 	}
+	if(DEBUG)
+		printf("Socket Binding Done\n");
 }
 
 void listenThroughSocket()
@@ -52,4 +56,7 @@ void listenThroughSocket()
 		fprintf(stderr,"I can't listen to this port right now. Please try again!\n");
 		exit(0);
 	}
+
+	if(DEBUG)
+		printf("Socket Listening\n");
 }

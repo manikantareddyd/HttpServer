@@ -1,3 +1,6 @@
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 int scan(char *input, char *output, int start, int max)
 {
     /*
@@ -40,6 +43,8 @@ int scan(char *input, char *output, int start, int max)
 	return i;
 }
 
+
+
 void *intTostr(int a)
 {
 	memset(intstr,0,4);
@@ -52,13 +57,43 @@ void *intTostr(int a)
 	intstr[4] = 0;
 }
 
-//Not for recreational purposes
-int sendMessage(char *messageBuffer, FILE * writeSocket)
+
+void sendString(char *message, FILE *writeSocket)
 {
+	writeToSocket(message,writeSocket);
+}
+void sendHeader(char *statusCode, char *contentType, char * contentLength, FILE *writeSocket)
+{
+	int headerLength = 
+		strlen("\r\nHTTP/1.1 ")+
+		strlen(statusCode)+
+		strlen("\r\nContent-Length:")+strlen(contentLength)+
+		strlen("\r\nContent-Type:")+strlen(contentType)+
+		strlen("\r\n");
+	
+	char header[headerLength+atoi(contentLength)];
+	memset(header,0,headerLength+20);
+	strcpy(header,"\r\nHTTP/1.1 ");
+	strcat(header,statusCode);
+	strcat(header,"\r\nContent-Length:");
+	strcat(header,contentLength);
+	strcat(header,"\r\nContent-Type:");
+	strcat(header,contentType);
+	strcat(header,"\r\n\r\n");
+	strcat(header,"<html><head></head><body>poop</body></html>");
+	printf("%s\r\n",header);
+	sendString(header,writeSocket);
+}
+
+//Not for recreational purposes
+int writeToSocket(char *messageBuffer, FILE *writeSocket)
+{
+    
 	int bytesToWrite = 4096;
 	int bytesWritten = 0;
 	int bytesOverHead = 0;
-	while(1){
+	while(1)
+	{
 		bytesWritten = fwrite( 
 			messageBuffer + bytesOverHead,
 			1,
@@ -102,27 +137,50 @@ void handleGetRequest()
     char file[200];
     memset(file,0,200);
     scan(messageBuffer,file,5,200);
-    printf("%s\n",file); 
+    printf("%s\n",file);
+	FILE *writeSocket = fdopen(dup(clientSockId), "w"); 
+	//sendString(messageBuffer,clientSocId);
+	printf("DaUFq2\n");
+	
+	char numBuf[5];
+	printf("DaUFq2\n");
+	sprintf(numBuf,"%d",43);
+	printf("DaUFq\n");
+	
+	sendHeader("200 OK", "text/html",numBuf, writeSocket);
+
+	fclose(writeSocket);
+
 }
 
 void handleConnection(int clientSockId)
 {
 	FILE *readSocket = fdopen(dup(clientSockId),"r");		
-	
+	if(DEBUG)
+        printf("Handling Connection Request\n");
 
-	while(1)
-	{
+	// while(1)
+	// {
 		memset(messageBuffer,0,4096);
-		bytesRead = fread(
-			messageBuffer,
-			1, 
-			4096, 
-			readSocket
-		);
+		// bytesRead = fread(
+		// 	messageBuffer,
+		// 	1, 
+		// 	4096, 
+		// 	readSocket
+		// );
+        bytesRead = recv(
+            clientSockId,
+            messageBuffer,
+            4096,
+            0
+        );
 		if(bytesRead == 0)
 		{
-			break;
+			return;
 		}
+
+        if(DEBUG)
+            printf("Message Read\n%d\n",bytesRead);
         
         int request = checkrequest();
 
@@ -130,7 +188,7 @@ void handleConnection(int clientSockId)
         {
             handleGetRequest();
         }
-    }
+    // }
 		
 	fclose(readSocket);
 }
@@ -146,13 +204,16 @@ void acceptNewConnection()
 		(struct sockaddr *)&serverStorage,
 		&serverStorageSize
 	);
+
 	if(clientSockId < 0)
 	{
 		printf("I can't accept this socket\n");
 		exit(0);
 	}
-
-	handleConnection(clientSockId);
+    if(DEBUG)
+        printf("New Connection accepted \n");
+	
+    handleConnection(clientSockId);
 
 	close(clientSockId);
 }
