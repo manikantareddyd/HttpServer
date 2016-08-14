@@ -5,7 +5,6 @@
 
 char intstr[5];
 
-
 void writeToSocket(char *messageBuffer, FILE * writeSocket);
 
 void *intTostr(int a);
