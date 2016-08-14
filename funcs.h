@@ -58,16 +58,16 @@ void handleRequests(int clientSockId)
 		We'll use two files. One for writng and the other for reading.
 		We can generate the file pointers using fdopen. Read Man pages
 	*/		
-	FILE *writeSocket = fdopen(clientSockId, "w");
 	FILE *readSocket = fdopen(dup(clientSockId),"r");		
 	
 	
 	/*
 		Empty the buffer and send a welcome message.
+        Update: Http Server has no requirement of this :p'
 	*/
-	memset(messageBuffer,0,4096);
-	strcpy(messageBuffer, "Server: Welcome - We just connected\n");
-	sendMessage(messageBuffer,writeSocket);
+	// memset(messageBuffer,0,4096);
+	// strcpy(messageBuffer, "Server: Welcome - We just connected\n");
+	// sendMessage(messageBuffer,writeSocket);
 	
 
 	while(1)
@@ -91,76 +91,23 @@ void handleRequests(int clientSockId)
 		{
 			break;
 		}
+        
+        int request = checkrequest(messageBuffer);
 
-		printf("The client needs this file: %s\n", messageBuffer);
-		
-		/*
-			Open the file required by the client
-		*/
-		FILE *file;
-		file = fopen(messageBuffer,"r");
-		
-		if(file == NULL)
-		{
-			/*
-				If the clients request is erroneous, we
-				need to tell the client its erroneous.
-			*/
-			memset(messageBuffer,0,4096);
-			strcpy(messageBuffer,"Server: Such file doesn't exist\n");
-			intTostr(333);
-			snprintf(messageBuffer+4091, 5, "%s",intstr); 	
-			sendMessage(messageBuffer,writeSocket);
-			continue;
-		}
+        if(request == 1)
+        {
+            handleGetRequest();
+        }
 
-		memset(messageBuffer,0,4096);
-		strcpy(messageBuffer,"Server: I received your request\n\tHere are the File contents:");
-		intTostr(24);
-		snprintf(messageBuffer+4091, 5, "%s",intstr);
-		sendMessage(messageBuffer,writeSocket);
 		
-		while(1)
-		{
-			/*
-				This is a control loop for file reading.
-				We read from a large file block by block into
-				buffer and then transmit it.
-
-			*/
-			memset(messageBuffer,0,4096);
-			bytesRead = fread(messageBuffer,1,4091,file);
-			if(!bytesRead)
-			{
-				/*
-					If EOF of file is reached, fread stops reading.
-					So we send our custom EOF in the message buffer
-					and then start listening for new message by breaking
-					of this loop.
-				*/
-				memset(messageBuffer,0,4096);
-				strcpy(messageBuffer,"<---EOF--->");
-				intTostr(11);
-				snprintf(messageBuffer+4091, 5, "%s",intstr);
-				sendMessage(messageBuffer,writeSocket);
-				break;
-			}
-			intTostr(bytesRead);
-			/*
-				We did something really cool here.
-				We send the client how many bytes we read from file 
-				as a integer string in the last 5 bytes.
-				So the client needs to just read those many bytes, 
-				although we send 4096 bytes through fwrite.
-			*/
-			snprintf(messageBuffer+4091, 5, "%s",intstr);
-			sendMessage(messageBuffer,writeSocket);
-		}
-	}
 	fclose(readSocket);
 	fclose(writeSocket);
 }
 
+void handleGetRequest()
+{
+    //I need to write this
+}
 void acceptNewConnection()
 {
 	/*
