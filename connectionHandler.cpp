@@ -15,17 +15,18 @@ void acceptNewConnection()
 		printf("I can't accept this socket\n");
 		exit(0);
 	}
-	if(fork()==0)
+	int pid; 
+	if((pid = fork())==0)
 	{
 		close(listenStatus);
 		
 		if(DEBUG)
-			printf("New Connection accepted \n");
+			printf("New Connection accepted PID: %d\n",pid);
 		
-		handleConnection();7
+		handleConnection();
 		
 		close(clientSockId);
-		
+		close(serverSockId);
 		if(DEBUG)
 			printf("Connection Closed\nChild Process will exit now\n\n");
 		exit(0);
@@ -34,7 +35,6 @@ void acceptNewConnection()
 	{
 		close(clientSockId);
 	}
-	
 }
 
 void handleConnection()
