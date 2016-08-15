@@ -23,7 +23,7 @@ void acceptNewConnection()
 		handleConnection();
 		close(clientSockId);
 		if(DEBUG)
-			printf("Connection Closed\nListening for new stuff\n\n");
+			printf("Connection Closed\nChild Process will exit now\n\n");
 		exit(0);
 	}
 	else

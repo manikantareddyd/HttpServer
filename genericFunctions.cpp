@@ -3,6 +3,14 @@ void *intTostr(int a);
 int scan(char *input, char *output, int start, int max);
 int writeToSocket(char *messageBuffer, FILE *writeSocket);
 
+void sigintHandler(int sig_num)
+{
+	//Helps to keep ports from being blocked when we close the server :P
+	close(listenStatus);
+	close(serverSockId);
+	exit(0);
+}
+
 int writeToSocket(char *messageBuffer, FILE *writeSocket)
 {
     
