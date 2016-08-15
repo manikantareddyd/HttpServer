@@ -1,7 +1,6 @@
 
 #include "server.h"
 
-
 int main(int argc, char *argv[])
 {
 	PORT = atoi(argv[1]);

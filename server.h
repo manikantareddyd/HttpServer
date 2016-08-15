@@ -7,5 +7,7 @@
 #include <unistd.h>
 #include "globals.h"
 #include "SocketFunctions.h"
+#include "genericFuncs.h"
 #include "funcs.h"
+#include "connectionHandler.h"
 
