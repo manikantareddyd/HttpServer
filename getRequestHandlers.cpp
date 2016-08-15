@@ -5,15 +5,7 @@ void handleGetRequest();
 
 void handleGetRequest()
 {
-    char file[200];
-    memset(file,0,200);
-    scan(messageBuffer,file,5,200);
-    printf("\n\n%s\n\n",messageBuffer);
-	HttpRequest request(messageBuffer);
-	//printf("\nBoo %s\n",request.RequestType());
-	cout << "\n Boo \n" << request["Connection"] << endl;
 	FILE *writeSocket = fdopen(dup(clientSockId), "w"); 
-	//sendString(messageBuffer,clientSocId);
 	char numBuf[5];
 	memset(numBuf,0,5);
 	sprintf(numBuf,"%d",45);

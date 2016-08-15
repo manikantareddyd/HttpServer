@@ -9,3 +9,4 @@ socklen_t serverStorageSize;
 int PORT;
 int DEBUG = 1;
 int listenStatus;
+bool keepAlive;

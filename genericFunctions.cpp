@@ -7,6 +7,7 @@ void sigintHandler(int sig_num)
 {
 	//Helps to keep ports from being blocked when we close the server :P
 	close(listenStatus);
+	close(clientSockId);
 	close(serverSockId);
 	exit(0);
 }
@@ -35,50 +36,6 @@ int writeToSocket(char *messageBuffer, FILE *writeSocket)
 		}
 	}
     return 1;
-}
-
-int scan(char *input, char *output, int start, int max)
-{
-    /*
-        This is a motherfucking piece of code. 
-        All it does is extract a substring from the input
-        LOL
-		I picked it from a guy(@fekberg) on github
-		Its painful to write. Please Excuse me :( 
-    */
-	if ( start >= strlen(input) )
-		return -1;
-
-	int appending_char_count = 0;
-	int i = start;
-	int count = 0;
-
-	for ( ; i < strlen(input); i ++ )
-	{
-		if ( *(input + i) != '\t' && *(input + i) != ' ' && *(input + i) != '\n' && *(input + i) != '\r')
-		{
-			if (count < (max-1))
-			{
-				*(output + appending_char_count) = *(input + i ) ;
-				appending_char_count += 1;
-
-				count++;
-			}		
-		}	
-		else
-			break;
-	}
-	*(output + appending_char_count) = '\0';	
-
-	i += 1;
-
-	for (; i < strlen(input); i ++ )
-	{
-		if ( *(input + i ) != '\t' && *(input + i) != ' ' && *(input + i) != '\n' && *(input + i) != '\r')
-			break;
-	}
-
-	return i;
 }
 
 void *intTostr(int a)
