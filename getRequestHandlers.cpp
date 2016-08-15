@@ -1,3 +1,8 @@
+
+void sendString(char *message, FILE *writeSocket);
+void sendHeader(char *statusCode, char *contentType, char * contentLength, FILE *writeSocket);
+void handleGetRequest();
+
 void handleGetRequest()
 {
     char file[200];
@@ -13,7 +18,7 @@ void handleGetRequest()
 	fclose(writeSocket);
 }
 
-void sendHeader(char *statusCode, char *contentType, char * contentLength, FILE *writeSocket)
+void sendHeader(char *statusCode, char *contentType, char *contentLength, FILE *writeSocket)
 {
 	int headerLength = 
 		strlen("\r\nHTTP/1.1 ")+

@@ -5,11 +5,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "globals.c"
 
-#include "functionDeclarations.h"
-#include "SocketFunctions.c"
-#include "genericFunctions.c"
-#include "getRequestHandlers.c"
-#include "connectionHandler.c"
+#include "globals.cpp"
+#include "SocketFunctions.cpp"
+#include "genericFunctions.cpp"
+#include "getRequestHandlers.cpp"
+#include "connectionHandler.cpp"
 

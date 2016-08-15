@@ -5,7 +5,7 @@ int status,i;
 char messageBuffer[4096];
 int bytesRead;
 struct sockaddr_storage serverStorage;
-int serverStorageSize;
+socklen_t serverStorageSize;
 int PORT;
 int DEBUG = 1;
 int listenStatus;

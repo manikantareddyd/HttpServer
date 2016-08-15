@@ -1,4 +1,8 @@
 //Not for recreational purposes
+void *intTostr(int a);
+int scan(char *input, char *output, int start, int max);
+int writeToSocket(char *messageBuffer, FILE *writeSocket);
+
 int writeToSocket(char *messageBuffer, FILE *writeSocket)
 {
     

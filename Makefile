@@ -1,11 +1,7 @@
-all: servermake clientmake
+all: servermake
 
 servermake: server.c
 	gcc server.c -o server
 
-clientmake: client.c
-	gcc client.c -o client
-
 clean:
 	rm server
-	rm client

@@ -1,6 +1,9 @@
+int checkRequest();
+void handleConnection();
+void acceptNewConnection();
+
 void acceptNewConnection()
 {
-
 	serverStorageSize = sizeof(serverStorage);
 	clientSockId = accept(
 		serverSockId, 
@@ -53,7 +56,7 @@ void handleConnection()
         if(DEBUG)
             printf("Message Read\n%d\n",bytesRead);
         
-        int request = checkrequest();
+        int request = checkRequest();
 
         if(request == 1)
         {
@@ -68,7 +71,7 @@ void handleConnection()
 	return;
 }
 
-int checkrequest()
+int checkRequest()
 {
     char requestType[5];
     memset(requestType,0,5);
