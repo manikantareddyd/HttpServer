@@ -1,14 +1,16 @@
-#include <stdio.h>
-// #include <iostream>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-void sendString(char *message, FILE *writeSocket)
+void handleGetRequest()
 {
-	writeToSocket(message,writeSocket);
+    char file[200];
+    memset(file,0,200);
+    scan(messageBuffer,file,5,200);
+    printf("%s\n",file);
+	FILE *writeSocket = fdopen(dup(clientSockId), "w"); 
+	//sendString(messageBuffer,clientSocId);
+	char numBuf[5];
+	memset(numBuf,0,5);
+	sprintf(numBuf,"%d",45);
+	sendHeader("200 OK", "text/plain",numBuf, writeSocket);
+	fclose(writeSocket);
 }
 
 void sendHeader(char *statusCode, char *contentType, char * contentLength, FILE *writeSocket)
@@ -34,18 +36,7 @@ void sendHeader(char *statusCode, char *contentType, char * contentLength, FILE 
 	sendString(header,writeSocket);
 }
 
-void handleGetRequest()
+void sendString(char *message, FILE *writeSocket)
 {
-    char file[200];
-    memset(file,0,200);
-    scan(messageBuffer,file,5,200);
-    printf("%s\n",file);
-	FILE *writeSocket = fdopen(dup(clientSockId), "w"); 
-	//sendString(messageBuffer,clientSocId);
-	char numBuf[5];
-	memset(numBuf,0,5);
-	sprintf(numBuf,"%d",45);
-	sendHeader("200 OK", "text/plain",numBuf, writeSocket);
-	fclose(writeSocket);
+	writeToSocket(message,writeSocket);
 }
-
