@@ -1,3 +1,10 @@
+#include <stdio.h>
+// #include <iostream>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 void createSocket()
 {
@@ -50,7 +57,7 @@ void listenThroughSocket()
 		We'll start listenig through this socket, 
 		whether anyone wants to connect.
 	*/
-	int listenStatus = listen(serverSockId , 3);
+	listenStatus = listen(serverSockId , 3);
 	if(listenStatus < 0)
 	{
 		fprintf(stderr,"I can't listen to this port right now. Please try again!\n");

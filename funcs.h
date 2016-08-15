@@ -1,6 +1,10 @@
-#include <string.h>
 #include <stdio.h>
+// #include <iostream>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 int scan(char *input, char *output, int start, int max)
 {
     /*
@@ -56,35 +60,6 @@ void *intTostr(int a)
 	}
 	intstr[4] = 0;
 }
-
-
-void sendString(char *message, FILE *writeSocket)
-{
-	writeToSocket(message,writeSocket);
-}
-void sendHeader(char *statusCode, char *contentType, char * contentLength, FILE *writeSocket)
-{
-	int headerLength = 
-		strlen("\r\nHTTP/1.1 ")+
-		strlen(statusCode)+
-		strlen("\r\nContent-Length:")+strlen(contentLength)+
-		strlen("\r\nContent-Type:")+strlen(contentType)+
-		strlen("\r\n");
-	
-	char header[headerLength+atoi(contentLength)];
-	memset(header,0,headerLength+20);
-	strcpy(header,"\r\nHTTP/1.1 ");
-	strcat(header,statusCode);
-	strcat(header,"\r\nContent-Length:");
-	strcat(header,contentLength);
-	strcat(header,"\r\nContent-Type:");
-	strcat(header,contentType);
-	strcat(header,"\r\n\r\n");
-	strcat(header,"<html><head></head><body>poop</body></html>");
-	printf("%s\r\n",header);
-	sendString(header,writeSocket);
-}
-
 //Not for recreational purposes
 int writeToSocket(char *messageBuffer, FILE *writeSocket)
 {
@@ -111,6 +86,35 @@ int writeToSocket(char *messageBuffer, FILE *writeSocket)
 	}
     return 1;
 }
+
+
+void sendString(char *message, FILE *writeSocket)
+{
+	writeToSocket(message,writeSocket);
+}
+void sendHeader(char *statusCode, char *contentType, char * contentLength, FILE *writeSocket)
+{
+	int headerLength = 
+		strlen("\r\nHTTP/1.1 ")+
+		strlen(statusCode)+
+		strlen("\r\nContent-Length:")+strlen(contentLength)+
+		strlen("\r\nContent-Type:")+strlen(contentType)+
+		strlen("\r\n");
+	
+	char header[headerLength+atoi(contentLength)];
+	memset(header,0,headerLength+20);
+	strcpy(header,"\r\nHTTP/1.1 ");
+	strcat(header,statusCode);
+	strcat(header,"\r\nContent-Length:");
+	strcat(header,contentLength);
+	strcat(header,"\r\nContent-Type:");
+	strcat(header,contentType);
+	strcat(header,"\r\n\r\n");
+	strcat(header,"<html><head></head><body>poop</body></html>\r\n");
+	printf("%s\r\n",header);
+	sendString(header,writeSocket);
+}
+
 
 int checkrequest()
 {
@@ -149,45 +153,33 @@ void handleGetRequest()
     printf("%s\n",file);
 	FILE *writeSocket = fdopen(dup(clientSockId), "w"); 
 	//sendString(messageBuffer,clientSocId);
-	printf("DaUFq2\n");
-	
 	char numBuf[5];
-	printf("DaUFq2\n");
-	sprintf(numBuf,"%d",43);
-	printf("DaUFq\n");
-	
+	memset(numBuf,0,5);
+	sprintf(numBuf,"%d",45);
 	sendHeader("200 OK", "text/plain",numBuf, writeSocket);
-
 	fclose(writeSocket);
-
 }
 
-void handleConnection(int clientSockId)
+void handleConnection()
 {
-	FILE *readSocket = fdopen(dup(clientSockId),"r");		
 	if(DEBUG)
-        printf("Handling Connection Request\n");
+        printf("Handling Connection Request\n\n");
 
 	while(1)
 	{
 		memset(messageBuffer,0,4096);
-		// bytesRead = fread(
-		// 	messageBuffer,
-		// 	1, 
-		// 	4096, 
-		// 	readSocket
-		// );
         bytesRead = recv(
             clientSockId,
             messageBuffer,
             4096,
             0
         );
-		if(bytesRead == 0)
+		if(bytesRead <= 0)
 		{
-			return;
+			printf("Client has closed connection\r\n");
+			break;
 		}
-
+		printf("bytesRead %d\n",bytesRead);
         if(DEBUG)
             printf("Message Read\n%d\n",bytesRead);
         
@@ -196,10 +188,14 @@ void handleConnection(int clientSockId)
         if(request == 1)
         {
             handleGetRequest();
+			printf("Request has been Handled\n");
         }
+		else
+		{
+			break;
+		}
     }
-		
-	fclose(readSocket);
+	return;
 }
 
 
@@ -214,22 +210,20 @@ void acceptNewConnection()
 		(struct sockaddr *)&serverStorage,
 		&serverStorageSize
 	);
+	if(clientSockId < 0)
+	{
+		printf("I can't accept this socket\n");
+		exit(0);
+	}
 	if(fork()==0)
 	{
-			if(clientSockId < 0)
-		{
-			printf("I can't accept this socket\n");
-			exit(0);
-		}
+		close(listenStatus);
 		if(DEBUG)
 			printf("New Connection accepted \n");
-		
-		handleConnection(clientSockId);
-
+		handleConnection();
 		close(clientSockId);
-
 		if(DEBUG)
-			printf("Connection Closed\n");
+			printf("Connection Closed\nListening for new stuff\n\n");
 		exit(0);
 	}
 	else
