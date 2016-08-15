@@ -1,5 +1,5 @@
 #include <stdio.h>
-// #include <iostream>
+#include <iostream>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <string.h>
@@ -7,6 +7,7 @@
 #include <unistd.h>
 
 #include "globals.cpp"
+#include "utils/HttpRequest.cpp"
 #include "SocketFunctions.cpp"
 #include "genericFunctions.cpp"
 #include "getRequestHandlers.cpp"

@@ -1,7 +1,7 @@
 all: servermake
 
-servermake: server.c
-	gcc server.c -o server
+servermake: server.cpp
+	g++ server.cpp -o server
 
 clean:
 	rm server

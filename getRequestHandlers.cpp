@@ -8,7 +8,10 @@ void handleGetRequest()
     char file[200];
     memset(file,0,200);
     scan(messageBuffer,file,5,200);
-    printf("%s\n",file);
+    printf("\n\n%s\n\n",messageBuffer);
+	HttpRequest request(messageBuffer);
+	//printf("\nBoo %s\n",request.RequestType());
+	cout << "\n Boo \n" << request["Connection"] << endl;
 	FILE *writeSocket = fdopen(dup(clientSockId), "w"); 
 	//sendString(messageBuffer,clientSocId);
 	char numBuf[5];

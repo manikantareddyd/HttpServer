@@ -33,8 +33,10 @@ int scan(char *input, char *output, int start, int max)
 {
     /*
         This is a motherfucking piece of code. 
-        All it does is extract the request type from the input
+        All it does is extract a substring from the input
         LOL
+		I picked it from a guy(@fekberg) on github
+		Its painful to write. Please Excuse me :( 
     */
 	if ( start >= strlen(input) )
 		return -1;
