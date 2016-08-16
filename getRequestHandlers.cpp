@@ -3,9 +3,9 @@ void sendString(char *message, FILE *writeSocket);
 void sendHeader(char *statusCode, char *contentType, char * contentLength, FILE *writeSocket);
 void handleGetRequest();
 
-void handleGetRequest()
+void handleGetRequest(HttpRequest request)
 {
-	FILE *writeSocket = fdopen(dup(clientSockId), "w"); 
+	FILE *writeSocket = fdopen(dup(clientSockId), "w");
 	char numBuf[5];
 	memset(numBuf,0,5);
 	sprintf(numBuf,"%d",45);
@@ -15,13 +15,13 @@ void handleGetRequest()
 
 void sendHeader(char *statusCode, char *contentType, char *contentLength, FILE *writeSocket)
 {
-	int headerLength = 
+	int headerLength =
 		strlen("\r\nHTTP/1.1 ")+
 		strlen(statusCode)+
 		strlen("\r\nContent-Length:")+strlen(contentLength)+
 		strlen("\r\nContent-Type:")+strlen(contentType)+
 		strlen("\r\n");
-	
+
 	char header[headerLength+atoi(contentLength)];
 	memset(header,0,headerLength+20);
 	strcpy(header,"\r\nHTTP/1.1 ");

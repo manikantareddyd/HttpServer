@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include "globals.cpp"
-#include "utils/HttpRequest.cpp"
+#include "utils/clews/http/HttpRequest.cpp"
 #include "SocketFunctions.cpp"
 #include "genericFunctions.cpp"
 #include "getRequestHandlers.cpp"

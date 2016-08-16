@@ -6,7 +6,7 @@ void acceptNewConnection()
 {
 	serverStorageSize = sizeof(serverStorage);
 	clientSockId = accept(
-		serverSockId, 
+		serverSockId,
 		(struct sockaddr *)&serverStorage,
 		&serverStorageSize
 	);
@@ -15,16 +15,16 @@ void acceptNewConnection()
 		printf("I can't accept this socket\n");
 		exit(0);
 	}
-	int pid; 
+	int pid;
 	if((pid = fork())==0)
 	{
 		close(listenStatus);
-		
+
 		if(DEBUG)
 			printf("New Connection accepted PID: %d\n",pid);
-		
+
 		handleConnection();
-		
+
 		close(clientSockId);
 		close(serverSockId);
 		if(DEBUG)
@@ -61,14 +61,14 @@ void handleConnection()
 		{
 			printf("bytesRead %d\n",bytesRead);
 		}
-            
+
 		HttpRequest request(messageBuffer);
-	
+
 		keepAlive = request["Connection"] != "Close";
 
 	    if(request.RequestType() == "GET")
         {
-            handleGetRequest();
+            handleGetRequest(request);
 			printf("Request has been Handled\n");
         }
 		else
