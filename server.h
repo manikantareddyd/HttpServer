@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <cstring>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <string.h>

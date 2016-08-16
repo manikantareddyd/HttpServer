@@ -16,12 +16,12 @@ void acceptNewConnection()
 		exit(0);
 	}
 	int pid;
-	if((pid = fork())==0)
+	if(fork()==0)
 	{
 		close(listenStatus);
 
 		if(DEBUG)
-			printf("New Connection accepted PID: %d\n",pid);
+			printf("New Connection accepted PID: %d\n",getpid());
 
 		handleConnection();
 
@@ -69,7 +69,7 @@ void handleConnection()
 	    if(request.RequestType() == "GET")
         {
             handleGetRequest(request);
-			printf("Request has been Handled\n");
+			if(DEBUG) printf("Request has been Handled\n");
         }
 		else
 		{
