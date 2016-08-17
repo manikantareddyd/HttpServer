@@ -67,12 +67,18 @@ void handleConnection()
 		HttpRequest request(messageBuffer);
 		
 		keepAlive = request["Connection"] != "Close";
-
+		cout<<"LOL "<<request.RequestType()<<endl;
 		if(request.RequestType() == "GET")
 		{
 			handleGetRequest(request);
 			if(DEBUG) 
-				printf("Request has been Handled\n");
+				printf("GET Request has been Handled\n");
+		}
+		else if(request.RequestType() == "POST")
+		{
+			handlePostRequest(request);
+			if(DEBUG)
+				printf("POST Request has been Handled\n");
 		}
 		else
 		{
@@ -83,7 +89,6 @@ void handleConnection()
 		{
 			break;
 		}
-		
     }
 	return;
 }

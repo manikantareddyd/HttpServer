@@ -11,3 +11,4 @@ int PORT;
 int DEBUG = 1;
 int listenStatus;
 bool keepAlive;
+std::string rootDir = "/home/brah/Project 1/webfiles";

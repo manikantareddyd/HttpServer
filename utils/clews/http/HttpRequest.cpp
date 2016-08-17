@@ -47,9 +47,9 @@ bool HttpRequest::ParseRequestLine(string requestLine)
 	vector<string> splitLine = split(requestLine, ' ');
 	if(splitLine.size() > 0)
 	{
-		if(splitLine.at(0) == "GET" && splitLine.size() == 3)
+		if((splitLine.at(0) == "GET" || splitLine.at(0) == "POST" || splitLine.at(0) == "HEAD") && splitLine.size() == 3)
 		{
-			mRequestType = "GET";
+			mRequestType = splitLine.at(0);
 			mRequestResource = splitLine.at(1);
 			mHttpVersion = splitLine.at(2);
 		}

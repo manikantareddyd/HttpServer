@@ -10,8 +10,9 @@ void handleGetRequest(HttpRequest request)
 {
 	if(DEBUG) 
 		printf("Handling Get Request\n");
-
-	std::string path = "."+request.RequestedResource();
+	std::string resource =request.RequestedResource();
+	if(resource == "/") resource = "/index.html";
+	std::string path = rootDir+resource;
 	FILE *file = fopen(path.c_str(),"r");
 	std::string mimeType = getMimeType(path);
 	if(file!=NULL)
@@ -28,7 +29,7 @@ void handleGetRequest(HttpRequest request)
 void handle404()
 {
 	printf("Handling 404\n");
-	std::string message = "<center>Requested File not found. ERROR 404\r\n</center>";
+	std::string message = "<center>ERROR 404. Requested File not found.\r\n</center>";
 	char numBuf[5];
 	memset(numBuf,0,5);
 	sprintf(numBuf,"%ld",message.length());

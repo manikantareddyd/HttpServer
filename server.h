@@ -14,6 +14,7 @@
 #include "SocketFunctions.cpp"
 #include "genericFunctions.cpp"
 #include "getRequestHandlers.cpp"
+#include "postRequestHandlers.cpp"
 #include "badRequestHandlers.cpp"
 #include "connectionHandler.cpp"
 #include "sendResponses.cpp"
