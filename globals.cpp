@@ -8,6 +8,6 @@ int bytesRead;
 struct sockaddr_storage serverStorage;
 socklen_t serverStorageSize;
 int PORT;
-int DEBUG = 0;
+int DEBUG = 1;
 int listenStatus;
 bool keepAlive;

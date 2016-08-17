@@ -15,7 +15,7 @@ typedef id_t zoneid_t;
 
 class HttpRequest
 {
-private:
+public:
     std::string mRequestLine;
     std::string mRequestType;
     std::string mRequestResource;
@@ -34,7 +34,7 @@ private:
     void SetContentType(std::string mimeLine);
     void SetContent(std::string contentLine);
     bool ParseRequestLine(std::string requestLine);
-public:
+// public:
     HttpRequest(std::string requestBuffer);
 
     std::string RequestType();

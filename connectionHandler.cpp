@@ -63,22 +63,24 @@ void handleConnection()
 		}
 
 		HttpRequest request(messageBuffer);
-
+		printf("%s\n",messageBuffer);
 		keepAlive = request["Connection"] != "Close";
 
-	    if(request.RequestType() == "GET")
-        {
-            handleGetRequest(request);
+		if(request.RequestType() == "GET")
+		{
+			handleGetRequest(request);
 			if(DEBUG) printf("Request has been Handled\n");
-        }
+		}
 		else
 		{
+			printf("Boop\n");
 			break;
 		}
 		if(!keepAlive)
 		{
 			break;
 		}
+		
     }
 	return;
 }
