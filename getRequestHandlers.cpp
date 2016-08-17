@@ -21,14 +21,13 @@ void handleGetRequest(HttpRequest request)
 	{
 		handle404();
 	}
-
 	fclose(file);
 }
 
 void handle404()
 {
 	printf("Handling 404\n");
-	string message = "Requested File not found. ERROR 404\r\n";
+	string message = "<center>Requested File not found. ERROR 404\r\n</center>";
 	char numBuf[5];
 	memset(numBuf,0,5);
 	sprintf(numBuf,"%ld",message.length());
@@ -44,16 +43,7 @@ void handle200(string mimeType,int fileLength,FILE *file)
 	memset(numBuf,0,5);
 	sprintf(numBuf,"%d",fileLength);
 	sendHeader((char *)"200 OK",(char *)mimeType.c_str(),numBuf,(char *)"keep-alive");
-	while(1)
-	{
-		memset(messageBuffer,0,4096);
-		int bytesRead = fread(messageBuffer,1,4096,file);
-		if(!bytesRead)
-		{
-			break;
-		}
-		send(clientSockId,messageBuffer,4096,0);
-	}
+	sendFile(file);
 }
 
 void sendHeader(char *statusCode, char *contentType, char *contentLength, char *connection )
@@ -68,7 +58,16 @@ void sendHeader(char *statusCode, char *contentType, char *contentLength, char *
 	send(clientSockId,(char *)header.c_str(),header.length(),0);
 }
 
-void sendString(char *message, FILE *writeSocket)
+void sendFile(FILE *file)
 {
-	writeToSocket(message,writeSocket);
+	while(1)
+	{
+		memset(messageBuffer,0,4096);
+		int bytesRead = fread(messageBuffer,1,4096,file);
+		if(!bytesRead)
+		{
+			break;
+		}
+		send(clientSockId,messageBuffer,4096,0);
+	}
 }
