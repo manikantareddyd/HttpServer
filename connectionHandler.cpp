@@ -1,42 +1,3 @@
-int checkRequest();
-void handleConnection();
-void acceptNewConnection();
-
-void acceptNewConnection()
-{
-	serverStorageSize = sizeof(serverStorage);
-	clientSockId = accept(
-		serverSockId,
-		(struct sockaddr *)&serverStorage,
-		&serverStorageSize
-	);
-	if(clientSockId < 0)
-	{
-		printf("I can't accept this socket\n");
-		exit(0);
-	}
-	int pid;
-	if(fork()==0)
-	{
-		close(listenStatus);
-
-		if(DEBUG)
-			printf("New Connection accepted PID: %d\n",getpid());
-
-		handleConnection();
-
-		close(clientSockId);
-		close(serverSockId);
-		if(DEBUG)
-			printf("Connection Closed\nChild Process will exit now\n\n");
-		exit(0);
-	}
-	else
-	{
-		close(clientSockId);
-	}
-}
-
 void handleConnection()
 {
 	if(DEBUG)
@@ -67,7 +28,8 @@ void handleConnection()
 		HttpRequest request(messageBuffer);
 		
 		keepAlive = request["Connection"] != "Close";
-		cout<<"LOL "<<request.RequestType()<<endl;
+		if(DEBUG)
+			cout<<"Request Type: "<<request.RequestType()<<endl;
 		if(request.RequestType() == "GET")
 		{
 			handleGetRequest(request);
@@ -79,6 +41,12 @@ void handleConnection()
 			handlePostRequest(request);
 			if(DEBUG)
 				printf("POST Request has been Handled\n");
+		}
+		else if(request.RequestType() == "HEAD")
+		{
+			handleHeadRequest(request);
+			if(DEBUG)
+				printf("HEAD Request has been Handled\n");
 		}
 		else
 		{

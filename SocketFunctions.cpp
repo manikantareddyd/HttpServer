@@ -59,3 +59,38 @@ void listenThroughSocket()
 	if(DEBUG)
 		printf("Socket Listening\n");
 }
+
+void acceptNewConnection()
+{
+	serverStorageSize = sizeof(serverStorage);
+	clientSockId = accept(
+		serverSockId,
+		(struct sockaddr *)&serverStorage,
+		&serverStorageSize
+	);
+	if(clientSockId < 0)
+	{
+		printf("I can't accept this socket\n");
+		exit(0);
+	}
+	int pid;
+	if(fork()==0)
+	{
+		close(listenStatus);
+
+		if(DEBUG)
+			printf("New Connection accepted PID: %d\n",getpid());
+
+		handleConnection();
+
+		close(clientSockId);
+		close(serverSockId);
+		if(DEBUG)
+			printf("Connection Closed\nChild Process will exit now\n\n");
+		exit(0);
+	}
+	else
+	{
+		close(clientSockId);
+	}
+}

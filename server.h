@@ -11,11 +11,12 @@
 #include <signal.h>
 #include "globals.cpp"
 #include "utils/clews/http/HttpRequest.cpp"
-#include "SocketFunctions.cpp"
 #include "genericFunctions.cpp"
+#include "sendResponses.cpp"
+#include "responseHandlers.cpp"
 #include "getRequestHandlers.cpp"
+#include "headRequestHandlers.cpp"
 #include "postRequestHandlers.cpp"
 #include "badRequestHandlers.cpp"
 #include "connectionHandler.cpp"
-#include "sendResponses.cpp"
-
+#include "SocketFunctions.cpp"
