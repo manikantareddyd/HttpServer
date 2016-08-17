@@ -51,6 +51,7 @@ void handleConnection()
             4096,
             0
         );
+		
 		if(bytesRead <= 0)
 		{
 			printf("Client has closed connection\r\n");
@@ -59,21 +60,23 @@ void handleConnection()
 
 		if(DEBUG)
 		{
+			printf("%s\n",messageBuffer);
 			printf("bytesRead %d\n",bytesRead);
 		}
 
 		HttpRequest request(messageBuffer);
-		printf("%s\n",messageBuffer);
+		
 		keepAlive = request["Connection"] != "Close";
 
 		if(request.RequestType() == "GET")
 		{
 			handleGetRequest(request);
-			if(DEBUG) printf("Request has been Handled\n");
+			if(DEBUG) 
+				printf("Request has been Handled\n");
 		}
 		else
 		{
-			printf("Boop\n");
+			handleBadRequest();
 			break;
 		}
 		if(!keepAlive)

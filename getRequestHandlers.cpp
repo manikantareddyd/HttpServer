@@ -4,19 +4,18 @@ void sendHeader(char *statusCode, char *contentType, char * contentLength,char *
 void handle200(std::string mimeType,int fileLength,FILE *file);
 void handle404();
 void sendFile(FILE *file);
+std::string getMimeType(string path);
 
 void handleGetRequest(HttpRequest request)
 {
 	if(DEBUG) 
 		printf("Handling Get Request\n");
+
 	std::string path = "."+request.RequestedResource();
 	FILE *file = fopen(path.c_str(),"r");
-	char ext[10];
-	memset(ext,0,10);
-	getExtension((char *)path.c_str(),ext,10);
+	std::string mimeType = getMimeType(path);
 	if(file!=NULL)
 	{
-		std::string mimeType = "text/html";
 		handle200(mimeType,getFileLength(path),file);
 	}
 	else

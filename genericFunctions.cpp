@@ -3,6 +3,25 @@ void *intTostr(int a);
 int scan(char *input, char *output, int start, int max);
 int writeToSocket(char *messageBuffer, FILE *writeSocket);
 
+std::string getMimeType(std::string path)
+{
+	std::string ext = path.substr(path.find_last_of(".") + 1);
+	std::string mimeType;
+	if(ext == "html")
+		mimeType = "text/html";
+	else if(ext == "jpg" or ext == "jpeg")
+		mimeType = "image/jpeg";
+	else if(ext == "txt")
+		mimeType = "text/plain";
+	else if(ext == "pdf")
+		mimeType = "Application/pdf";
+	else if(ext == "gif")
+		mimeType = "image/gif";
+	else
+		mimeType = "unknown";
+	return mimeType; 
+}
+
 int getFileLength(std::string filename) // path to file
 {
     FILE *p_file = NULL;
@@ -55,31 +74,7 @@ void sigintHandler(int sig_num)
 	exit(0);
 }
 
-int writeToSocket(char *messageBuffer, FILE *writeSocket)
-{
-    
-	int bytesToWrite = 4096;
-	int bytesWritten = 0;
-	int bytesOverHead = 0;
-	while(1)
-	{
-		bytesWritten = fwrite( 
-			messageBuffer + bytesOverHead,
-			1,
-			bytesToWrite,
-			writeSocket
-		);
-		fflush(writeSocket);
-		if(bytesWritten == bytesToWrite) 
-			break;
-		else
-		{
-			bytesOverHead = bytesOverHead + bytesWritten;
-			bytesToWrite = 4096 - bytesOverHead;
-		}
-	}
-    return 1;
-}
+
 
 void *intTostr(int a)
 {
