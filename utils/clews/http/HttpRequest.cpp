@@ -91,10 +91,10 @@ string HttpRequest::operator[](string fieldName)
 }
 std::string HttpRequest::Header()
 {
-	std::string header = mRequestLine + "\r\n";
+	std::string header = mRequestLine + "\t";
 	for(size_t i=0;i<mHeaderLines.size();++i)
 	{
-		header+=mHeaderLines.at(i) + "\r\n";
+		header+=mHeaderLines.at(i) + "\t";
 	}
 	return header;
 }

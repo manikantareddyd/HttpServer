@@ -1,7 +1,7 @@
 all: servermake
 
 servermake: server.cpp
-	g++ server.cpp -o server
+	g++ -pthread -static -std=c++11 server.cpp -o server
 
 clean:
 	rm server

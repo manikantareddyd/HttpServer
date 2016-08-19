@@ -1,14 +1,11 @@
 
 void sendHeader(char *statusCode, char *contentType, char *contentLength, char *connection )
 {
-	char buf[1000];
-	time_t now = time(0);
-	struct tm  ti = *gmtime(&now);
-	strftime(buf, sizeof buf, "%a, %d %b %Y %H:%M:%S %Z", &ti);
+	
 
 	std::string header = 
 		"\r\nHTTP/1.1 "+(std::string)statusCode+"\r\n"+
-		"Date:"+(std::string)buf+"\r\n"+
+		"Date:"+getNowTime()+"\r\n"+
 		"Content-Length:"+(std::string)contentLength+"\r\n";
 	if((std::string)contentType == "unknown")
 		header = header + "Media-Type: Application/octet-stream\r\n";

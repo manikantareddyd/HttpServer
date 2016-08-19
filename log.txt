@@ -1,0 +1,2 @@
+Request Time: Fri, 19 Aug 2016 14:00:24 GMT		Client Ip: 127.0.0.1		Requested Resource: /lol.pop		Requested Host: 127.0.0.1:1234		URI: 127.0.0.1:1234/lol.pop
+Request Time: Fri, 19 Aug 2016 14:03:12 GMT		Client Ip: 127.0.0.1		Requested Resource: /		Requested Host: 127.0.0.1:1234		URI: 127.0.0.1:1234/

@@ -32,7 +32,10 @@ void handleConnection()
 		}
 
 		HttpRequest request(messageBuffer);
+
 		
+		logToFile(request);
+				
 		
 		if(getConnection(request) == "close")
 			keepAlive = 0;
