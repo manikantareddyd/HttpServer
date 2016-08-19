@@ -5,14 +5,7 @@ void handleGetRequest(HttpRequest request)
 	std::string resource =request.RequestedResource();
 	if(resource == "/") resource = "/index.html";
 	std::string path = rootDir+resource;
-	std::string connection;
-    if(request["Connection"] == "" && request["connection"] == "")
-      connection = "keep-alive";
-    else
-    {
-      if(request["connection"]=="") connection = request["Connection"];
-      else connection = request["connection"];
-    }
+	std::string connection = getConnection(request);
 	FILE *file = fopen(path.c_str(),"r");
 	std::string mimeType = getMimeType(path);
 	if(DEBUG)

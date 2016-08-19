@@ -3,6 +3,35 @@ void *intTostr(int a);
 int scan(char *input, char *output, int start, int max);
 int writeToSocket(char *messageBuffer, FILE *writeSocket);
 
+char easytolower(char in){
+  if(in<='Z' && in>='A')
+    return in-('Z'-'z');
+  return in;
+} 
+
+
+std::string getConnection(HttpRequest request)
+{
+	std::string connection;
+    if(request["Connection"] == "" && request["connection"] == "")
+      connection = "keep-alive";
+    else
+    {
+      if(request["connection"]=="")
+	  {
+		  connection = request["Connection"];
+		  std::transform(connection.begin(), connection.end(), connection.begin(), easytolower);
+	  } 
+      else 
+	  {
+		  connection = request["connection"];
+		  std::transform(connection.begin(), connection.end(), connection.begin(), easytolower);
+	  }
+    }
+	connection.resize (connection.size () - 1);
+	return connection;
+}
+
 std::string getMimeType(std::string path)
 {
 	std::string ext = path.substr(path.find_last_of(".") + 1);
