@@ -1,4 +1,6 @@
 void handleBadRequest()
 {
-    printf("but why\n");
+    if(DEBUG) 
+		printf("Handling BAD Request\n");
+    handle400();
 }

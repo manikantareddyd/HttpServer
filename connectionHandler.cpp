@@ -12,7 +12,7 @@ void handleConnection()
             BUFFERSIZE,
             0
         );
-		
+
 		if(bytesRead <= 0)
 		{
 			printf("Client has closed connection\r\n");
@@ -23,6 +23,12 @@ void handleConnection()
 		{
 			printf("%s\n",messageBuffer);
 			printf("bytesRead %d\n",bytesRead);
+		}
+
+		if(!(messageBuffer[bytesRead-1] == '\n' && messageBuffer[bytesRead-2]=='\r'))
+		{
+			handleBadRequest();
+			continue;
 		}
 
 		HttpRequest request(messageBuffer);
@@ -54,7 +60,7 @@ void handleConnection()
 		else
 		{
 			handleBadRequest();
-			break;
+			continue;
 		}
 		if(!keepAlive)
 		{

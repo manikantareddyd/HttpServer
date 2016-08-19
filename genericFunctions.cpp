@@ -3,6 +3,13 @@ void *intTostr(int a);
 int scan(char *input, char *output, int start, int max);
 int writeToSocket(char *messageBuffer, FILE *writeSocket);
 
+void logToFile(std::string text)
+{
+	std::mutex m;
+	m.lock();
+	m.unlock();
+}
+
 char easytolower(char in){
   if(in<='Z' && in>='A')
     return in-('Z'-'z');
