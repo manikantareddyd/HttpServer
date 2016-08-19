@@ -10,5 +10,5 @@ socklen_t serverStorageSize;
 int PORT;
 int DEBUG = 1;
 int listenStatus;
-bool keepAlive;
-std::string rootDir = "/home/brah/Project 1/webfiles";
+bool keepAlive = 1;
+std::string rootDir = "/home/brah/HttpServer/webfiles";

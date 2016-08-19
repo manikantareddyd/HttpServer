@@ -1,7 +1,0 @@
-// Place your settings in this file to overwrite default and user settings.
-{
-    "editor.fontSize": 22,
-    "editor.fontFamily": "DejaVu Sans Mono",
-    "editor.tabCompletion":true,
-    "editor.mouseWheelZoom": true
-}

@@ -27,7 +27,11 @@ void handleConnection()
 
 		HttpRequest request(messageBuffer);
 		
-		keepAlive = request["Connection"] != "Close";
+		cout<<"It says "<<request["connection"]<<endl;
+		if(request["Connection"] == "Close" || request["Connection"] == "close" || request["connection"] == "Close" || request["connection"] == "close" )
+		{
+			keepAlive = 0;
+		}
 		if(DEBUG)
 			cout<<"Request Type: "<<request.RequestType()<<endl;
 		if(request.RequestType() == "GET")
