@@ -11,7 +11,7 @@ void createSocket()
 	);
 	if(serverSockId == -1)
 	{
-		printf("Something went wrong with socket generation.\nPlease try again :P \n");
+		if(DEBUG) printf("Something went wrong with socket generation.\nPlease try again :P \n");
 		exit(0);
 	}
 	if(DEBUG)
@@ -70,7 +70,7 @@ void acceptNewConnection()
 	);
 	if(clientSockId < 0)
 	{
-		printf("I can't accept this socket\n");
+		if(DEBUG) printf("I can't accept this socket\n");
 		exit(0);
 	}
 	int pid;

@@ -6,15 +6,10 @@ void handleGetRequest(HttpRequest request)
 	if(resource[resource.length()-1] == '/') 
 		resource = resource + "index.html";
 	std::string path = rootDir+resource;
+	if(DEBUG) cout<<"Request Path: "<<path<<endl;
 	std::string connection = getConnection(request);
 	FILE *file = fopen(path.c_str(),"r");
 	std::string mimeType = getMimeType(path);
-	if(DEBUG)
-	{
-		cout<<path<<endl;
-		cout<<file<<endl;
-		cout<<connection<<endl;
-	}
 		
 	if(file!=NULL)
 	{

@@ -9,7 +9,7 @@ int BUFFERSIZE=4096;
 char messageBuffer[4096];
 int bytesRead;
 int PORT;
-int DEBUG = 0;
+int DEBUG = 1;
 int listenStatus;
 bool keepAlive = 1;
 std::string rootDir = "/home/brah/HttpServer/webfiles";

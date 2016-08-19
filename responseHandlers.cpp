@@ -1,7 +1,7 @@
 void handle501(std::string connection)
 {
-    printf("Handling 501\n");
-	std::string message = "<center>ERROR 501. Requested Method is not Implemented.\r\n</center>";
+    if(DEBUG) printf("Handling 501\n");
+	std::string message = "<center>ERROR 501. Requested Method is not Implemented.\r\n</center>\r\n";
 	char numBuf[5];
 	memset(numBuf,0,5);
 	sprintf(numBuf,"%ld",message.length());
@@ -13,8 +13,8 @@ void handle501(std::string connection)
 
 void handle404(std::string connection)
 {
-	printf("Handling 404\n");
-	std::string message = "<center>ERROR 404. Requested File not found.\r\n</center>";
+	if(DEBUG) printf("Handling 404\n");
+	std::string message = "<center>ERROR 404. Requested File not found.\r\n</center>\r\n";
 	char numBuf[5];
 	memset(numBuf,0,5);
 	sprintf(numBuf,"%ld",message.length());
@@ -26,8 +26,8 @@ void handle404(std::string connection)
 
 void handle400()
 {
-	printf("Handling 404\n");
-	std::string message = "<center>ERROR 400. BAD Request Format\r\n</center>";
+	if(DEBUG) printf("Handling 404\n");
+	std::string message = "<center>ERROR 400. BAD Request Format\r\n</center>\r\n";
 	char numBuf[5];
 	memset(numBuf,0,5);
 	sprintf(numBuf,"%ld",message.length());
@@ -39,6 +39,7 @@ void handle400()
 
 void handle200(std::string mimeType,int fileLength,FILE *file,std::string connection)
 {
+	if(DEBUG) printf("Handling 200\n");
 	char numBuf[5];
 	memset(numBuf,0,5);
 	sprintf(numBuf,"%d",fileLength);

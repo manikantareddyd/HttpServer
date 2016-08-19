@@ -15,7 +15,7 @@ void handleConnection()
 
 		if(bytesRead <= 0)
 		{
-			printf("Client has closed connection\r\n");
+			if(DEBUG) printf("Client has closed connection\r\n");
 			break;
 		}
 
@@ -67,7 +67,7 @@ void handleConnection()
 		}
 		if(!keepAlive)
 		{
-			cout<<"Breaking Off"<<endl;
+			if(DEBUG) cout<<"Breaking Off"<<endl;
 			break;
 		}
     }
