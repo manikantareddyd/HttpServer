@@ -49,7 +49,7 @@ void listenThroughSocket()
 		We'll start listenig through this socket, 
 		whether anyone wants to connect.
 	*/
-	listenStatus = listen(serverSockId , 3);
+	listenStatus = listen(serverSockId , 25);
 	if(listenStatus < 0)
 	{
 		fprintf(stderr,"I can't listen to this port right now. Please try again!\n");
