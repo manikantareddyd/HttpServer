@@ -11,6 +11,19 @@ void handle501(std::string connection)
 	send(clientSockId,messageBuffer,message.length(),0);
 }
 
+void handle501(std::string connection,std::string resource)
+{
+    if(DEBUG) printf("Handling 501\n");
+	std::string message = "<center>ERROR 501. Requested Method is not Implemented.<br>"+resource+" is a Directory</center>\r\n";
+	char numBuf[5];
+	memset(numBuf,0,5);
+	sprintf(numBuf,"%ld",message.length());
+	sendHeader((char *)"501 Not Implemented",(char *)"text/html",numBuf,(char *)connection.c_str());
+	memset(messageBuffer,0,BUFFERSIZE);
+	sprintf(messageBuffer,"%s",(char *)message.c_str());
+	send(clientSockId,messageBuffer,message.length(),0);
+}
+
 void handle404(std::string connection)
 {
 	if(DEBUG) printf("Handling 404\n");

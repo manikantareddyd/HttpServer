@@ -1,5 +1,6 @@
 void handleGetRequest(HttpRequest request)
 {
+	struct stat statbuf;
 	if(DEBUG) 
 		printf("Handling GET Request\n");
 	std::string resource =request.RequestedResource();
@@ -10,7 +11,14 @@ void handleGetRequest(HttpRequest request)
 	std::string connection = getConnection(request);
 	FILE *file = fopen(path.c_str(),"r");
 	std::string mimeType = getMimeType(path);
-		
+	
+	stat((char *)path.c_str(), &statbuf);
+	if(S_ISDIR(statbuf.st_mode))
+    {
+		handle501(connection,resource);
+		return;
+	}
+
 	if(file!=NULL)
 	{
 		handle200(mimeType,getFileLength(path),file,connection);
@@ -20,5 +28,7 @@ void handleGetRequest(HttpRequest request)
 		handle404(connection);
 	}
 	fclose(file);
+
+	
 }
 

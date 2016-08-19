@@ -15,6 +15,9 @@
 #include <signal.h>
 #include <ctime>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+
 //My files
 #include "globalVariables.cpp"
 #include "utils/clews/http/HttpRequest.cpp"
