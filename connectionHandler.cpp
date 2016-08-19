@@ -25,12 +25,7 @@ void handleConnection()
 			printf("bytesRead %d\n",bytesRead);
 		}
 
-		if(!(messageBuffer[bytesRead-1] == '\n' && messageBuffer[bytesRead-2]=='\r'))
-		{
-			handleBadRequest();
-			continue;
-		}
-
+		
 		HttpRequest request(messageBuffer);
 
 		

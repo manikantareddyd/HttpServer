@@ -6,7 +6,7 @@ void sendHeader(char *statusCode, char *contentType, char *contentLength, char *
 	std::string header = 
 		"\r\nHTTP/1.1 "+(std::string)statusCode+"\r\n"+
 		"Date:"+getNowTime()+"\r\n"+
-		"Server:"+"Kanta Enterprises"+"\r\n"+
+		"Server:"+"Thor/1.4.5"+"\r\n"+
 		"Content-Length:"+(std::string)contentLength+"\r\n";
 	if((std::string)contentType == "unknown")
 		header = header + "Media-Type: Application/octet-stream\r\n";
