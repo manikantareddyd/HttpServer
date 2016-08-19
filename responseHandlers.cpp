@@ -39,7 +39,7 @@ void handle404(std::string connection)
 
 void handle400()
 {
-	if(DEBUG) printf("Handling 404\n");
+	if(DEBUG) printf("Handling 400\n");
 	std::string message = "<center>ERROR 400. BAD Request Format\r\n</center>\r\n";
 	char numBuf[5];
 	memset(numBuf,0,5);

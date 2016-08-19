@@ -12,4 +12,4 @@ int PORT = 80;
 int DEBUG = 0;
 int listenStatus;
 bool keepAlive = 1;
-std::string rootDir = "/home/brah/HttpServer/webfiles";
+std::string rootDir = "/home/cse425user/httpserver/webfiles";
