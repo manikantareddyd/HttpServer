@@ -6,6 +6,7 @@
 #include <cstring>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -23,4 +24,4 @@
 #include "postRequestHandlers.cpp"
 #include "badRequestHandlers.cpp"
 #include "connectionHandler.cpp"
-#include "SocketFunctions.cpp"
+#include "socketFunctions.cpp"

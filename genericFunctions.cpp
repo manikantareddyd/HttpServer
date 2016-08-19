@@ -47,7 +47,7 @@ std::string getMimeType(std::string path)
 	else if(ext == "gif")
 		mimeType = "image/gif";
 	else
-		mimeType = "application/octet-stream";
+		mimeType = "unknown";
 	return mimeType; 
 }
 

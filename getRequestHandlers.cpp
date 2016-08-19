@@ -3,7 +3,8 @@ void handleGetRequest(HttpRequest request)
 	if(DEBUG) 
 		printf("Handling GET Request\n");
 	std::string resource =request.RequestedResource();
-	if(resource[resource.length()-1] == '/') resource = resource + "index.html";
+	if(resource[resource.length()-1] == '/') 
+		resource = resource + "index.html";
 	std::string path = rootDir+resource;
 	std::string connection = getConnection(request);
 	FILE *file = fopen(path.c_str(),"r");

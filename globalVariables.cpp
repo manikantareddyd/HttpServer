@@ -1,15 +1,15 @@
 char intstr[5];
 int serverSockId, clientSockId;
-
-struct sockaddr_in serverSockAddr,clientSocAddr;
+struct sockaddr_in serverSockAddr,clientSockAddr;
+socklen_t clientStorageSize,serverStorageSize;
+struct sockaddr_storage serverStorage,clientStorage;
+std::string clientIP; 
 int status,i;
 int BUFFERSIZE=4096;
 char messageBuffer[4096];
 int bytesRead;
-struct sockaddr_storage serverStorage;
-socklen_t serverStorageSize;
 int PORT;
-int DEBUG = 1;
+int DEBUG = 0;
 int listenStatus;
 bool keepAlive = 1;
 std::string rootDir = "/home/brah/HttpServer/webfiles";
