@@ -8,7 +8,7 @@ int status,i;
 int BUFFERSIZE=4096;
 char messageBuffer[4096];
 int bytesRead;
-int PORT;
+int PORT = 80;
 int DEBUG = 0;
 int listenStatus;
 bool keepAlive = 1;

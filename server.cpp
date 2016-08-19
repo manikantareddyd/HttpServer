@@ -4,7 +4,8 @@
 int main(int argc, char *argv[])
 {
 	signal(SIGINT, sigintHandler);
-	PORT = atoi(argv[1]);
+	if(argv[1]!=NULL)
+		PORT = atoi(argv[1]);
 	if(argv[2]!=NULL) 
 		rootDir = argv[2];
 	createSocket();
