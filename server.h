@@ -1,3 +1,4 @@
+//Libraries
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
@@ -9,6 +10,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
+#include <ctime>
+
+//My files
 #include "globals.cpp"
 #include "utils/clews/http/HttpRequest.cpp"
 #include "genericFunctions.cpp"
