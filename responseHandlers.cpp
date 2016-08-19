@@ -6,7 +6,7 @@ void handle501(std::string connection)
 	memset(numBuf,0,5);
 	sprintf(numBuf,"%ld",message.length());
 	sendHeader((char *)"501 Not Implemented",(char *)"text/html",numBuf,(char *)connection.c_str());
-	memset(messageBuffer,0,4096);
+	memset(messageBuffer,0,BUFFERSIZE);
 	sprintf(messageBuffer,"%s",(char *)message.c_str());
 	send(clientSockId,messageBuffer,message.length(),0);
 }
@@ -19,7 +19,7 @@ void handle404(std::string connection)
 	memset(numBuf,0,5);
 	sprintf(numBuf,"%ld",message.length());
 	sendHeader((char *)"404 Not Found",(char *)"text/html",numBuf,(char *)connection.c_str());
-	memset(messageBuffer,0,4096);
+	memset(messageBuffer,0,BUFFERSIZE);
 	sprintf(messageBuffer,"%s",(char *)message.c_str());
 	send(clientSockId,messageBuffer,message.length(),0);
 }

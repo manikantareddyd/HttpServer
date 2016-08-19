@@ -13,10 +13,10 @@
 #include <ctime>
 
 //My files
-#include "globals.cpp"
+#include "globalVariables.cpp"
 #include "utils/clews/http/HttpRequest.cpp"
 #include "genericFunctions.cpp"
-#include "sendResponses.cpp"
+#include "responses.cpp"
 #include "responseHandlers.cpp"
 #include "getRequestHandlers.cpp"
 #include "headRequestHandlers.cpp"

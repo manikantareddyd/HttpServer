@@ -5,11 +5,11 @@ void handleConnection()
 
 	while(1)
 	{
-		memset(messageBuffer,0,4096);
+		memset(messageBuffer,0,BUFFERSIZE);
         bytesRead = recv(
             clientSockId,
             messageBuffer,
-            4096,
+            BUFFERSIZE,
             0
         );
 		
