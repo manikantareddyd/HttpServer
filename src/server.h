@@ -8,7 +8,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <thread>
-#include <mutex> 
+#include <mutex>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -20,7 +20,7 @@
 
 //My files
 #include "globalVariables.cpp"
-#include "utils/clews/http/HttpRequest.cpp"
+#include "../utils/clews/http/HttpRequest.cpp"
 #include "genericFunctions.cpp"
 #include "responses.cpp"
 #include "responseHandlers.cpp"

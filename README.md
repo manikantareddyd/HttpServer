@@ -1,5 +1,5 @@
 # Http Server
-A simple Http Server implemented in C++ for purely educational puposes, in case you need any reference!
+A simple Http Server implemented in C++ for purely educational purposes, in case you need any reference!
 
 ## Instructions to Setup.
 + Clone the repository in an appropriate location
